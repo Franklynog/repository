@@ -43,6 +43,20 @@ approach engineering work:
 | `systematic-debugging` | A bug or failing test needs root-cause analysis instead of guess-and-check. |
 | `verification-before-completion` | About to claim a task is done — verify the change actually works first. |
 
+## Long-form fanfiction skills
+
+A curated set for writing **long, multi-chapter fanfiction**, where the hard
+problems are continuity, characterization, and pacing across a big word count:
+
+| Skill | Use when |
+| --- | --- |
+| `story-bible` | Maintaining the single source of truth for canon facts, OCs, world rules, timeline, and relationships in an ongoing story. |
+| `character-voice` | Writing dialogue/POV and keeping characters distinct, consistent, and in-character (avoiding "OOC"). |
+| `chapter-outlining` | Planning the overall arc and chapter-by-chapter beats, or breaking through the "muddy middle". |
+| `continuity-tracking` | Revising or posting a new chapter and checking for contradictions in facts, timeline, knowledge state, and rules. |
+| `prose-craft` | Drafting/revising scene prose — show-don't-tell, sensory grounding, dialogue, sentence rhythm. |
+| `fanfic-conventions` | Preparing a fic for posting — ratings, tags, warnings, summary, POV/tense, trope handling, serialized-posting norms. |
+
 ## Adding a new skill
 
 1. Create `.claude/skills/<name>/SKILL.md`.

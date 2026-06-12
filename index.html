@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKYRIM.html — The Elder Scrolls, More or Less</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0a0c10; overflow: hidden; height: 100%; }
+  #wrap { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+  canvas { image-rendering: pixelated; background: #0a0c10; }
+  #hud {
+    position: absolute; left: 16px; top: 12px; color: #e8e0c8; pointer-events: none;
+    font: 14px/1.4 Georgia, 'Times New Roman', serif; text-shadow: 0 1px 2px #000;
+  }
+  .bar { width: 220px; height: 14px; background: #1c1f26; border: 1px solid #555; margin: 3px 0; position: relative; }
+  .bar > div { height: 100%; transition: width .15s; }
+  #hpfill { background: linear-gradient(#d04438, #8a2018); }
+  .barlabel { position: absolute; left: 6px; top: -1px; font-size: 11px; color: #fff; }
+  #stfill { background: linear-gradient(#3f9c45, #246b2a); }
+  #shfill { background: linear-gradient(#4a8fd0, #2a5e96); }
+  #stats { margin-top: 6px; font-size: 13px; }
+  #quest {
+    position: absolute; right: 16px; top: 12px; max-width: 280px; text-align: right;
+    color: #d8cfae; font: italic 14px Georgia, serif; text-shadow: 0 1px 2px #000; pointer-events: none;
+  }
+  #dialogue {
+    position: absolute; left: 50%; bottom: 60px; transform: translateX(-50%);
+    min-width: 320px; max-width: 640px; padding: 12px 20px; display: none;
+    background: rgba(8, 10, 14, .88); border: 1px solid #6b5d3f; color: #e8e0c8;
+    font: 16px Georgia, serif; text-align: center; text-shadow: 0 1px 2px #000;
+  }
+  #dialogue .speaker { color: #c9a84c; font-variant: small-caps; letter-spacing: 1px; }
+  #toast {
+    position: absolute; left: 50%; top: 18%; transform: translateX(-50%);
+    color: #fff; font: 28px Georgia, serif; letter-spacing: 4px; text-shadow: 0 2px 6px #000;
+    opacity: 0; transition: opacity .4s; pointer-events: none; text-align: center;
+  }
+  #overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; background: rgba(4, 5, 8, .92); color: #e8e0c8;
+    font: 18px Georgia, serif; text-align: center; z-index: 10;
+  }
+  #overlay h1 { font-size: 52px; letter-spacing: 10px; margin: 0 0 6px; font-weight: normal; }
+  #overlay h2 { font-size: 16px; letter-spacing: 3px; color: #9a8c64; font-weight: normal; margin: 0 0 28px; }
+  #overlay .keys { color: #8d97a8; font-size: 14px; margin-top: 26px; line-height: 1.9; }
+  #overlay button {
+    margin-top: 30px; padding: 10px 38px; font: 18px Georgia, serif; letter-spacing: 3px;
+    background: none; border: 1px solid #9a8c64; color: #e8e0c8; cursor: pointer;
+  }
+  #overlay button:hover { background: #2a2418; }
+  kbd { background: #1d222b; border: 1px solid #444; border-radius: 3px; padding: 1px 7px; font: 12px monospace; color: #cfd6e0; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game"></canvas>
+  <div id="hud">
+    <div class="bar"><div id="hpfill" style="width:100%"></div><span class="barlabel" id="hptext"></span></div>
+    <div class="bar"><div id="stfill" style="width:100%"></div><span class="barlabel">stamina</span></div>
+    <div class="bar"><div id="shfill" style="width:100%"></div><span class="barlabel">shout</span></div>
+    <div id="stats"></div>
+  </div>
+  <div id="quest"></div>
+  <div id="dialogue"></div>
+  <div id="toast"></div>
+  <div id="overlay">
+    <h1>SKYRIM</h1>
+    <h2>THE ELDER SCROLLS, MORE OR LESS</h2>
+    <div>You crossed the border into Skyrim. There was a cart, a headsman, a dragon — the usual.<br>
+    Now the Jarl of Riverwood-ish needs a word with you, and something enormous circles the northern peak.</div>
+    <div class="keys">
+      <kbd>W A S D</kbd> / arrows — move &nbsp; <kbd>Space</kbd> — attack &nbsp; <kbd>F</kbd> — shout (FUS RO DAH)<br>
+      <kbd>E</kbd> — talk / interact &nbsp; <kbd>H</kbd> — drink health potion
+    </div>
+    <button id="startbtn">BEGIN</button>
+  </div>
+</div>
+<script>
+'use strict';
+// ---------------------------------------------------------------- constants
+const TILE = 36, W = 84, H = 64;          // world size in tiles
+const VIEW_W = 1024, VIEW_H = 640;        // canvas size
+const T = { GRASS:0, TREE:1, WATER:2, ROCK:3, PATH:4, WALL:5, FLOOR:6, SNOW:7, BRIDGE:8, PERCH:9, GRAVE:10 };
+const SOLID = new Set([T.TREE, T.WATER, T.ROCK, T.WALL]);
+
+const canvas = document.getElementById('game');
+canvas.width = VIEW_W; canvas.height = VIEW_H;
+const ctx = canvas.getContext('2d');
+
+// seeded PRNG so the province of (roughly) Skyrim is the same every playthrough
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const rng = mulberry32(0xD07AC); // dovah-ish, in the hex characters available
+
+// ---------------------------------------------------------------- world gen
+const map = new Array(W * H).fill(T.GRASS);
+const at = (x, y) => (x < 0 || y < 0 || x >= W || y >= H) ? T.ROCK : map[y * W + x];
+const set = (x, y, t) => { if (x >= 0 && y >= 0 && x < W && y < H) map[y * W + x] = t; };
+const rect = (x0, y0, x1, y1, t) => { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) set(x, y, t); };
+
+// snowy mountain band across the north
+for (let y = 0; y < 12; y++) for (let x = 0; x < W; x++)
+  set(x, y, (y < 9 - rng() * 4) ? T.ROCK : T.SNOW);
+rect(0, 0, W - 1, 2, T.ROCK);
+
+// the Throat of the World: a perch carved into the peak
+rect(38, 2, 47, 7, T.SNOW); rect(40, 3, 45, 6, T.PERCH);
+// pass leading up to it
+for (let y = 7; y < 14; y++) { set(42, y, T.SNOW); set(43, y, T.SNOW); }
+
+// a river winding down the east side, with one bridge
+let rx = 60;
+for (let y = 12; y < H; y++) {
+  rx += Math.round((rng() - 0.48) * 2);
+  rx = Math.max(52, Math.min(70, rx));
+  for (let i = 0; i < 3; i++) set(rx + i, y, T.WATER);
+  if (y === 34) { set(rx, y, T.BRIDGE); set(rx + 1, y, T.BRIDGE); set(rx + 2, y, T.BRIDGE); }
+}
+
+// scattered pine forest
+for (let i = 0; i < 950; i++) {
+  const x = Math.floor(rng() * W), y = 13 + Math.floor(rng() * (H - 14));
+  if (at(x, y) === T.GRASS) set(x, y, T.TREE);
+}
+
+// town: Riverwood-ish (cleared, walled buildings, market square)
+rect(16, 36, 35, 50, T.GRASS);
+rect(22, 40, 29, 46, T.PATH);                       // square
+function house(x, y, w, h, doorX) {
+  rect(x, y, x + w, y + h, T.WALL);
+  rect(x + 1, y + 1, x + w - 1, y + h - 1, T.FLOOR);
+  set(doorX, y + h, T.FLOOR);                       // doorway on the south wall
+}
+house(17, 37, 5, 3, 19);   // Jarl's longhouse
+house(30, 37, 4, 3, 32);   // trader
+house(17, 46, 4, 3, 19);   // inn
+// road from town gate north toward the mountain pass
+for (let y = 14; y <= 40; y++) { set(42 - Math.floor((y - 14) * 0.7), y, T.PATH); set(43 - Math.floor((y - 14) * 0.7), y, T.PATH); }
+for (let x = 25; x <= 43; x++) set(x, 40, T.PATH);
+
+// Bleak Falls Barrow-ish: stone ruin in the west, full of draugr
+rect(5, 20, 14, 28, T.GRAVE);
+rect(5, 20, 14, 20, T.ROCK); rect(5, 28, 14, 28, T.ROCK);
+rect(5, 20, 5, 28, T.ROCK); rect(14, 20, 14, 28, T.ROCK);
+set(14, 24, T.GRAVE); set(13, 24, T.GRAVE);         // entrance
+
+// bandit camp in the east, across the bridge
+rect(70, 30, 78, 38, T.GRASS);
+set(74, 34, T.PATH); set(75, 34, T.PATH);
+
+// keep spawn + perch approach clear of trees
+rect(24, 41, 27, 44, T.PATH);
+
+const solid = (px, py) => SOLID.has(at(Math.floor(px / TILE), Math.floor(py / TILE)));
+
+// ---------------------------------------------------------------- entities
+const player = {
+  x: 25.5 * TILE, y: 43 * TILE, r: 12, dirX: 0, dirY: -1,
+  hp: 100, maxHp: 100, stam: 100, dmg: 14,
+  level: 1, xp: 0, gold: 25, potions: 2,
+  attackCd: 0, shoutCd: 0, hurtCd: 0, swing: 0,
+};
+const xpToLevel = () => player.level * 60;
+
+const ENEMY_TYPES = {
+  wolf:   { hp: 26,  dmg: 7,  speed: 95, aggro: 6.5, xp: 14, gold: 0,  glyph: '🐺', size: 14 },
+  bandit: { hp: 45,  dmg: 11, speed: 78, aggro: 6,   xp: 25, gold: 18, glyph: '🗡️', size: 15 },
+  draugr: { hp: 60,  dmg: 14, speed: 60, aggro: 5.5, xp: 35, gold: 12, glyph: '💀', size: 15 },
+  dragon: { hp: 420, dmg: 24, speed: 120, aggro: 11, xp: 300, gold: 500, glyph: '🐉', size: 30 },
+};
+const enemies = [];
+function spawn(type, tx, ty) {
+  const t = ENEMY_TYPES[type];
+  enemies.push({ type, ...t, maxHp: t.hp, r: t.size, x: tx * TILE, y: ty * TILE,
+    homeX: tx * TILE, homeY: ty * TILE, atkCd: 0, wanderT: 0, wx: 0, wy: 0, fireCd: 0, flash: 0 });
+}
+// wolves in the forest
+[[12,33],[10,44],[40,22],[48,30],[52,48],[20,56],[38,56],[60,20]].forEach(p => spawn('wolf', p[0], p[1]));
+// bandit camp
+[[72,32],[76,33],[74,36],[77,37]].forEach(p => spawn('bandit', p[0], p[1]));
+// draugr in the barrow
+[[7,22],[11,23],[8,26],[12,26],[9,24]].forEach(p => spawn('draugr', p[0], p[1]));
+// Alduin's understudy, waiting on the perch
+spawn('dragon', 42.5, 4.5);
+
+const npcs = [
+  { x: 19.5 * TILE, y: 39 * TILE, glyph: '👑', name: 'Jarl Balgruuf the Sufficient', jarl: true },
+  { x: 32 * TILE, y: 39 * TILE, glyph: '🧙', name: 'Belethor-ish', lines: [
+      'Everything\'s for sale, my friend! Except I haven\'t implemented a shop. So nothing is.',
+      'Some may call this junk. Me, I call them treasures.' ] },
+  { x: 19.5 * TILE, y: 48 * TILE, glyph: '🍺', name: 'Innkeeper', lines: [
+      'Rumor is a dragon\'s nesting on the peak north of here. Bad for business.',
+      'We don\'t get many travelers since the dragon showed up. Or roads. Or a second inn.' ] },
+  { x: 26 * TILE, y: 41 * TILE, glyph: '💂', name: 'Town Guard', lines: [
+      'I used to be an adventurer like you. Then I took an arrow in the knee.',
+      'Let me guess... someone stole your sweetroll.',
+      'No lollygaggin\'.',
+      'Heard they\'re reforming the Dawnguard. Not in this file, though.' ] },
+  { x: 28 * TILE, y: 45 * TILE, glyph: '💂', name: 'Town Guard', lines: [
+      'My cousin\'s out fighting dragons. And what do I get? Guard duty in a 1,000-line HTML file.',
+      'Stay out of trouble, Dragonborn.' ] },
+];
+
+const pickups = [];   // {x, y, kind:'gold'|'potion', amount}
+const floaters = [];  // damage numbers {x, y, text, t, color}
+let quest = 0;        // 0 = see the Jarl, 1 = slay the dragon, 2 = done
+let shake = 0, gameTime = 0, won = false, paused = true;
+
+// ---------------------------------------------------------------- input
+const keys = {};
+addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
+  if (e.code === 'KeyE') tryTalk();
+  if (e.code === 'KeyH') drinkPotion();
+});
+addEventListener('keyup', e => keys[e.code] = false);
+
+// ---------------------------------------------------------------- sound (tiny WebAudio blips)
+let audio;
+function blip(freq, dur, type = 'square', vol = 0.04) {
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audio.createOscillator(), g = audio.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, audio.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + dur);
+    o.connect(g); g.connect(audio.destination);
+    o.start(); o.stop(audio.currentTime + dur);
+  } catch (e) { /* sound is a luxury */ }
+}
+
+// ---------------------------------------------------------------- helpers
+function toast(text, big) {
+  const el = document.getElementById('toast');
+  el.textContent = text;
+  el.style.fontSize = big ? '44px' : '28px';
+  el.style.opacity = 1;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.style.opacity = 0, big ? 2600 : 1700);
+}
+function say(name, text) {
+  const el = document.getElementById('dialogue');
+  el.innerHTML = '<span class="speaker">' + name + '</span><br>' + text;
+  el.style.display = 'block';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.style.display = 'none', 4200);
+}
+function floater(x, y, text, color) { floaters.push({ x, y, text, t: 1, color }); }
+
+function moveWithCollision(e, dx, dy) {
+  if (dx && !solid(e.x + dx + Math.sign(dx) * e.r, e.y - e.r * .6) && !solid(e.x + dx + Math.sign(dx) * e.r, e.y + e.r * .6)) e.x += dx;
+  if (dy && !solid(e.x - e.r * .6, e.y + dy + Math.sign(dy) * e.r) && !solid(e.x + e.r * .6, e.y + dy + Math.sign(dy) * e.r)) e.y += dy;
+  e.x = Math.max(e.r, Math.min(W * TILE - e.r, e.x));
+  e.y = Math.max(e.r, Math.min(H * TILE - e.r, e.y));
+}
+
+function tryTalk() {
+  if (paused) return;
+  for (const n of npcs) {
+    if (Math.hypot(n.x - player.x, n.y - player.y) < TILE * 1.6) {
+      if (n.jarl) {
+        if (quest === 0) {
+          quest = 1;
+          say(n.name, 'Dragonborn! A dragon roosts on the Throat of the World, due north. ' +
+            'Slay it and the hold will owe you everything we have. Which is mostly snow.');
+          toast('NEW QUEST: DRAGON RISING');
+        } else if (quest === 1) {
+          say(n.name, 'The dragon still lives. North, Dragonborn. Follow the road. Dress warm.');
+        } else {
+          say(n.name, 'Skyrim will sing of you, Dragonborn. Well — hum, at least. Budget\'s tight.');
+        }
+      } else {
+        say(n.name, n.lines[Math.floor(Math.random() * n.lines.length)]);
+      }
+      blip(440, .1, 'sine');
+      return;
+    }
+  }
+}
+
+function drinkPotion() {
+  if (paused || player.potions <= 0 || player.hp >= player.maxHp) return;
+  player.potions--;
+  player.hp = Math.min(player.maxHp, player.hp + 45);
+  floater(player.x, player.y - 20, '+45', '#6fdc6f');
+  blip(660, .15, 'sine');
+}
+
+function gainXp(n) {
+  player.xp += n;
+  while (player.xp >= xpToLevel()) {
+    player.xp -= xpToLevel();
+    player.level++;
+    player.maxHp += 15; player.hp = player.maxHp;
+    player.dmg += 4;
+    toast('LEVEL UP — LEVEL ' + player.level, true);
+    blip(523, .3, 'triangle', .06); setTimeout(() => blip(784, .4, 'triangle', .06), 140);
+  }
+}
+
+function hurtPlayer(dmg, fromX, fromY) {
+  if (player.hurtCd > 0 || won) return;
+  player.hp -= dmg;
+  player.hurtCd = 0.7;
+  shake = Math.max(shake, 6);
+  floater(player.x, player.y - 24, '-' + dmg, '#ff6b5e');
+  blip(140, .2, 'sawtooth', .07);
+  const d = Math.hypot(player.x - fromX, player.y - fromY) || 1;
+  moveWithCollision(player, (player.x - fromX) / d * 18, (player.y - fromY) / d * 18);
+  if (player.hp <= 0) die();
+}
+
+function die() {
+  toast('YOU DIED — SOVNGARDE AWAITS (RESPAWNING)', true);
+  player.gold = Math.floor(player.gold / 2);
+  player.hp = player.maxHp;
+  player.x = 25.5 * TILE; player.y = 43 * TILE;
+  blip(98, .8, 'sawtooth', .08);
+}
+
+// ---------------------------------------------------------------- combat
+function attack() {
+  if (player.attackCd > 0 || player.stam < 12) return;
+  player.attackCd = 0.38; player.swing = 0.18; player.stam -= 12;
+  blip(220, .07, 'square');
+  const reach = TILE * 1.5;
+  const ax = player.x + player.dirX * reach * .6, ay = player.y + player.dirY * reach * .6;
+  for (const e of enemies) {
+    if (e.hp <= 0) continue;
+    if (Math.hypot(e.x - ax, e.y - ay) < reach * .8 + e.size) hitEnemy(e, player.dmg + Math.floor(Math.random() * 5), 14);
+  }
+}
+
+function shout() {
+  if (player.shoutCd > 0) return;
+  player.shoutCd = 9;
+  toast('FUS RO DAH!', true);
+  shake = 14;
+  blip(80, .6, 'sawtooth', .12); blip(60, .8, 'sawtooth', .1);
+  for (const e of enemies) {
+    if (e.hp <= 0) continue;
+    const dx = e.x - player.x, dy = e.y - player.y, d = Math.hypot(dx, dy);
+    if (d > TILE * 6) continue;
+    const dot = (dx * player.dirX + dy * player.dirY) / (d || 1);
+    if (dot > 0.35 || d < TILE * 1.5) {
+      hitEnemy(e, 22, 0);
+      const push = e.type === 'dragon' ? 50 : 130;
+      moveWithCollision(e, dx / (d || 1) * push, dy / (d || 1) * push);
+    }
+  }
+}
+
+function hitEnemy(e, dmg, knock) {
+  e.hp -= dmg; e.flash = 0.15;
+  floater(e.x, e.y - e.size - 8, dmg, '#ffd34d');
+  if (knock) {
+    const dx = e.x - player.x, dy = e.y - player.y, d = Math.hypot(dx, dy) || 1;
+    moveWithCollision(e, dx / d * knock, dy / d * knock);
+  }
+  if (e.hp <= 0) {
+    gainXp(e.xp);
+    blip(180, .25, 'triangle', .06);
+    if (e.gold) pickups.push({ x: e.x, y: e.y, kind: 'gold', amount: e.gold + Math.floor(Math.random() * 10) });
+    if (Math.random() < 0.3) pickups.push({ x: e.x + 14, y: e.y + 6, kind: 'potion' });
+    if (e.type === 'dragon') winGame();
+  }
+}
+
+const fireballs = [];
+function winGame() {
+  won = true; quest = 2;
+  toast('DRAGON SLAIN — ITS SOUL IS YOURS', true);
+  setTimeout(() => {
+    const ov = document.getElementById('overlay');
+    ov.style.display = 'flex';
+    ov.innerHTML = '<h1>DOVAHKIIN</h1><h2>DRAGON SLAIN · LEVEL ' + player.level + ' · ' + player.gold +
+      ' GOLD</h2><div>The World-Eater\'s understudy is no more. Songs will be written,<br>' +
+      'then heavily abridged for the credits.<br><br><i>Thanks for playing SKYRIM.html</i></div>' +
+      '<button onclick="closeOverlay()">KEEP EXPLORING</button>';
+  }, 2200);
+}
+window.closeOverlay = () => { document.getElementById('overlay').style.display = 'none'; paused = false; };
+
+// ---------------------------------------------------------------- update
+function update(dt) {
+  gameTime += dt;
+  player.attackCd = Math.max(0, player.attackCd - dt);
+  player.shoutCd = Math.max(0, player.shoutCd - dt);
+  player.hurtCd = Math.max(0, player.hurtCd - dt);
+  player.swing = Math.max(0, player.swing - dt);
+  player.stam = Math.min(100, player.stam + 18 * dt);
+  shake = Math.max(0, shake - dt * 30);
+
+  let mx = (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0);
+  let my = (keys.KeyS || keys.ArrowDown ? 1 : 0) - (keys.KeyW || keys.ArrowUp ? 1 : 0);
+  if (mx || my) {
+    const d = Math.hypot(mx, my);
+    player.dirX = mx / d; player.dirY = my / d;
+    const sp = 165 * dt;
+    moveWithCollision(player, mx / d * sp, my / d * sp);
+  }
+  if (keys.Space) attack();
+  if (keys.KeyF) shout();
+
+  // enemies
+  for (const e of enemies) {
+    if (e.hp <= 0) continue;
+    e.atkCd = Math.max(0, e.atkCd - dt);
+    e.flash = Math.max(0, e.flash - dt);
+    const dx = player.x - e.x, dy = player.y - e.y, dist = Math.hypot(dx, dy);
+    const aggroR = e.aggro * TILE;
+    if (dist < aggroR && !won) {
+      if (e.type === 'dragon') {
+        // the dragon flies: ignores terrain, strafes, breathes fire
+        if (dist > TILE * 3) { e.x += dx / dist * e.speed * dt; e.y += dy / dist * e.speed * dt; }
+        e.fireCd = Math.max(0, e.fireCd - dt);
+        if (e.fireCd === 0 && dist < TILE * 9) {
+          e.fireCd = 1.7;
+          fireballs.push({ x: e.x, y: e.y, vx: dx / dist * 240, vy: dy / dist * 240, t: 3 });
+          blip(300, .3, 'sawtooth', .05);
+        }
+      } else if (dist > e.size + player.r + 4) {
+        moveWithCollision(e, dx / dist * e.speed * dt, dy / dist * e.speed * dt);
+      }
+      if (dist < e.size + player.r + 10 && e.atkCd === 0) {
+        e.atkCd = e.type === 'dragon' ? 1.4 : 1.0;
+        hurtPlayer(e.dmg, e.x, e.y);
+      }
+    } else {
+      // wander near home
+      e.wanderT -= dt;
+      if (e.wanderT <= 0) {
+        e.wanderT = 1.5 + Math.random() * 2.5;
+        const a = Math.random() * Math.PI * 2;
+        e.wx = Math.cos(a); e.wy = Math.sin(a);
+        if (Math.hypot(e.homeX - e.x, e.homeY - e.y) > TILE * 4) {
+          const hd = Math.hypot(e.homeX - e.x, e.homeY - e.y);
+          e.wx = (e.homeX - e.x) / hd; e.wy = (e.homeY - e.y) / hd;
+        }
+      }
+      if (e.type !== 'dragon') moveWithCollision(e, e.wx * e.speed * .35 * dt, e.wy * e.speed * .35 * dt);
+    }
+  }
+
+  // fireballs
+  for (let i = fireballs.length - 1; i >= 0; i--) {
+    const f = fireballs[i];
+    f.x += f.vx * dt; f.y += f.vy * dt; f.t -= dt;
+    if (Math.hypot(f.x - player.x, f.y - player.y) < player.r + 8) {
+      hurtPlayer(18, f.x - f.vx, f.y - f.vy);
+      fireballs.splice(i, 1);
+    } else if (f.t <= 0 || solid(f.x, f.y)) fireballs.splice(i, 1);
+  }
+
+  // pickups
+  for (let i = pickups.length - 1; i >= 0; i--) {
+    const p = pickups[i];
+    if (Math.hypot(p.x - player.x, p.y - player.y) < player.r + 14) {
+      if (p.kind === 'gold') { player.gold += p.amount; floater(p.x, p.y - 12, '+' + p.amount + 'g', '#ffd34d'); }
+      else { player.potions++; floater(p.x, p.y - 12, '+potion', '#ff8b9e'); }
+      blip(880, .08, 'sine');
+      pickups.splice(i, 1);
+    }
+  }
+
+  for (let i = floaters.length - 1; i >= 0; i--) {
+    floaters[i].t -= dt * 0.9; floaters[i].y -= 28 * dt;
+    if (floaters[i].t <= 0) floaters.splice(i, 1);
+  }
+}
+
+// ---------------------------------------------------------------- render
+const TILE_COLORS = {
+  [T.GRASS]: ['#3d5e34', '#41633a'], [T.PATH]: ['#8a7a5c', '#84755a'],
+  [T.WATER]: ['#2b5d8a', '#2d639a'], [T.SNOW]: ['#cfd8de', '#c5cfd8'],
+  [T.ROCK]: ['#5a5f68', '#525760'], [T.WALL]: ['#4a3c2c', '#443628'],
+  [T.FLOOR]: ['#7a6648', '#75624a'], [T.TREE]: ['#33502c', '#375431'],
+  [T.BRIDGE]: ['#7d6242', '#776044'], [T.PERCH]: ['#8a8f98', '#80858f'],
+  [T.GRAVE]: ['#6a6f78', '#62676f'],
+};
+
+function render() {
+  const camX = Math.max(0, Math.min(W * TILE - VIEW_W, player.x - VIEW_W / 2)) + (Math.random() - .5) * shake;
+  const camY = Math.max(0, Math.min(H * TILE - VIEW_H, player.y - VIEW_H / 2)) + (Math.random() - .5) * shake;
+
+  const x0 = Math.floor(camX / TILE), y0 = Math.floor(camY / TILE);
+  const x1 = x0 + Math.ceil(VIEW_W / TILE) + 1, y1 = y0 + Math.ceil(VIEW_H / TILE) + 1;
+
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    const t = at(x, y), c = TILE_COLORS[t] || TILE_COLORS[T.GRASS];
+    ctx.fillStyle = c[(x + y) % 2];
+    const sx = x * TILE - camX, sy = y * TILE - camY;
+    ctx.fillRect(sx, sy, TILE + 1, TILE + 1);
+    if (t === T.TREE) { ctx.font = '26px serif'; ctx.fillText('🌲', sx + TILE / 2, sy + TILE / 2); }
+    if (t === T.GRAVE && (x * 7 + y * 13) % 5 === 0) { ctx.font = '18px serif'; ctx.fillText('🪦', sx + TILE / 2, sy + TILE / 2); }
+    if (t === T.WATER && (x + y + Math.floor(gameTime * 2)) % 7 === 0) {
+      ctx.fillStyle = 'rgba(255,255,255,.15)';
+      ctx.fillRect(sx + 6, sy + TILE / 2, TILE - 12, 2);
+    }
+  }
+
+  const draw = (glyph, x, y, size, flash) => {
+    ctx.font = size + 'px serif';
+    if (flash) { ctx.globalAlpha = 0.5; }
+    ctx.fillText(glyph, x - camX, y - camY);
+    ctx.globalAlpha = 1;
+  };
+
+  for (const p of pickups) draw(p.kind === 'gold' ? '💰' : '🧪', p.x, p.y, 18);
+
+  for (const n of npcs) {
+    draw(n.glyph, n.x, n.y, 24);
+    if (Math.hypot(n.x - player.x, n.y - player.y) < TILE * 1.6) {
+      ctx.fillStyle = '#e8e0c8'; ctx.font = '11px Georgia';
+      ctx.fillText('[E] ' + n.name, n.x - camX, n.y - camY - 24);
+    }
+  }
+
+  for (const e of enemies) {
+    if (e.hp <= 0) continue;
+    draw(e.glyph, e.x, e.y, e.type === 'dragon' ? 52 : 26, e.flash > 0);
+    if (e.hp < e.maxHp) {
+      const w = e.type === 'dragon' ? 60 : 28;
+      ctx.fillStyle = '#222'; ctx.fillRect(e.x - camX - w / 2, e.y - camY - e.size - 12, w, 4);
+      ctx.fillStyle = '#d04438'; ctx.fillRect(e.x - camX - w / 2, e.y - camY - e.size - 12, w * e.hp / e.maxHp, 4);
+    }
+  }
+
+  for (const f of fireballs) draw('🔥', f.x, f.y, 18);
+
+  // player + sword swing
+  if (player.swing > 0) {
+    ctx.strokeStyle = 'rgba(255,255,220,.8)'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    const a = Math.atan2(player.dirY, player.dirX);
+    ctx.arc(player.x - camX, player.y - camY, TILE * 1.2, a - 0.9, a + 0.9);
+    ctx.stroke();
+  }
+  if (!(player.hurtCd > 0.4 && Math.floor(gameTime * 20) % 2)) draw('🛡️', player.x, player.y, 26);
+
+  for (const f of floaters) {
+    ctx.globalAlpha = Math.max(0, f.t);
+    ctx.fillStyle = f.color; ctx.font = 'bold 15px Georgia';
+    ctx.fillText(f.text, f.x - camX, f.y - camY);
+    ctx.globalAlpha = 1;
+  }
+
+  // quest direction hint: arrow toward the dragon
+  if (quest === 1) {
+    const e = enemies.find(e => e.type === 'dragon');
+    if (e && e.hp > 0) {
+      const a = Math.atan2(e.y - player.y, e.x - player.x);
+      ctx.save();
+      ctx.translate(VIEW_W / 2, 46); ctx.rotate(a);
+      ctx.fillStyle = 'rgba(232,224,200,.7)';
+      ctx.beginPath(); ctx.moveTo(14, 0); ctx.lineTo(-8, -7); ctx.lineTo(-8, 7); ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // HUD
+  document.getElementById('hpfill').style.width = Math.max(0, player.hp / player.maxHp * 100) + '%';
+  document.getElementById('hptext').textContent = Math.max(0, Math.ceil(player.hp)) + ' / ' + player.maxHp;
+  document.getElementById('stfill').style.width = player.stam + '%';
+  document.getElementById('shfill').style.width = (100 - player.shoutCd / 9 * 100) + '%';
+  document.getElementById('stats').textContent =
+    'LVL ' + player.level + '  ·  XP ' + player.xp + '/' + xpToLevel() +
+    '  ·  ' + player.gold + ' gold  ·  ' + player.potions + ' potions [H]';
+  document.getElementById('quest').textContent =
+    quest === 0 ? 'Quest: Speak with the Jarl in his longhouse (town, northwest building).' :
+    quest === 1 ? 'Quest: Slay the dragon at the Throat of the World. Follow the arrow north.' :
+    'Quest complete. Skyrim belongs to the Nords. And to you.';
+}
+
+// ---------------------------------------------------------------- main loop
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  if (!paused) { update(dt); render(); }
+  requestAnimationFrame(frame);
+}
+document.getElementById('startbtn').onclick = () => {
+  document.getElementById('overlay').style.display = 'none';
+  paused = false;
+  blip(523, .2, 'triangle', .05); setTimeout(() => blip(392, .3, 'triangle', .05), 180);
+  setTimeout(() => say('Narrator', 'Hey, you. You\'re finally awake.'), 400);
+};
+render();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

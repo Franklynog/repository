@@ -1,0 +1,31 @@
+{
+  "title": "Crucible of the Crimson God",
+  "chapters": [
+    {
+      "slug": "chapter-001",
+      "title": "Chapter 1 \u2014 The Cold Road",
+      "words": 4221
+    },
+    {
+      "slug": "chapter-002",
+      "title": "Chapter 2 \u2014 Slag and Cinder",
+      "words": 3395
+    },
+    {
+      "slug": "chapter-003",
+      "title": "Chapter 3 \u2014 What the Strong Owe",
+      "words": 2429
+    },
+    {
+      "slug": "chapter-004",
+      "title": "Chapter 4 \u2014 The Ashwood",
+      "words": 3034
+    },
+    {
+      "slug": "chapter-005",
+      "title": "Chapter 5 \u2014 The Floor He Laid",
+      "words": 2899
+    }
+  ],
+  "total_words": 15978
+}

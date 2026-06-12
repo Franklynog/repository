@@ -1,0 +1,121 @@
+
+:root{
+  --maxw: 42rem;
+  --fs: 1.18rem;
+  --lh: 1.75;
+  --font-body: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --font-ui: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+html[data-theme="light"]{ --bg:#faf9f7; --fg:#1d1b18; --muted:#6b6258; --rule:#e0d8cc; --accent:#9a2c1f; --card:#ffffff; --shadow:rgba(0,0,0,.06); }
+html[data-theme="sepia"]{ --bg:#f4ecd8; --fg:#3b3122; --muted:#7a6a4f; --rule:#ddccab; --accent:#9a2c1f; --card:#fbf5e6; --shadow:rgba(80,60,20,.10); }
+html[data-theme="dark"]{ --bg:#15130f; --fg:#e7ddca; --muted:#a2937a; --rule:#332c20; --accent:#e0613f; --card:#1d1a14; --shadow:rgba(0,0,0,.5); }
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:var(--font-body);
+  font-size:var(--fs); line-height:var(--lh);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition:background .3s ease,color .3s ease;
+}
+
+/* progress bar */
+#progress{ position:fixed; top:0; left:0; right:0; height:3px; background:transparent; z-index:50; }
+#progress-bar{ height:100%; width:0; background:var(--accent); transition:width .1s linear; }
+
+/* toolbar */
+.toolbar{
+  position:sticky; top:0; z-index:40;
+  display:flex; align-items:center; gap:.4rem;
+  padding:.5rem clamp(.8rem,4vw,1.5rem);
+  background:color-mix(in srgb,var(--bg) 86%, transparent);
+  backdrop-filter:saturate(140%) blur(8px);
+  border-bottom:1px solid var(--rule);
+  font-family:var(--font-ui);
+}
+.tb-spacer{ flex:1; }
+.tb-btn{
+  font-family:var(--font-ui); font-size:.82rem; font-weight:600;
+  color:var(--muted); background:transparent; border:1px solid var(--rule);
+  border-radius:.5rem; padding:.32rem .6rem; cursor:pointer; text-decoration:none;
+  transition:all .15s ease; white-space:nowrap;
+}
+.tb-btn:hover{ color:var(--fg); border-color:var(--accent); }
+.tb-btn.home{ border-color:transparent; }
+
+/* cover / index */
+.cover{ max-width:var(--maxw); margin:0 auto; padding:clamp(1.5rem,6vw,4rem) clamp(1rem,5vw,1.5rem) 4rem; }
+.cover-head{ text-align:center; border-bottom:1px solid var(--rule); padding-bottom:2rem; margin-bottom:2rem; }
+.kicker{ font-family:var(--font-ui); text-transform:uppercase; letter-spacing:.22em; font-size:.72rem; color:var(--accent); margin:.2rem 0 .6rem; }
+.cover-title{ font-size:clamp(2.2rem,8vw,3.4rem); line-height:1.05; margin:.2rem 0 1rem; font-weight:700; letter-spacing:-.01em; }
+.cover-blurb{ color:var(--fg); font-size:1.05rem; max-width:34rem; margin:0 auto 1.2rem; }
+.cover-stats{ font-family:var(--font-ui); font-size:.8rem; color:var(--muted); letter-spacing:.03em; margin:.4rem 0 1.4rem; }
+.start-btn{
+  display:inline-block; font-family:var(--font-ui); font-weight:700; font-size:.95rem;
+  background:var(--accent); color:#fff; text-decoration:none;
+  padding:.7rem 1.4rem; border-radius:.6rem; box-shadow:0 2px 10px var(--shadow);
+  transition:transform .12s ease, filter .12s ease;
+}
+.start-btn:hover{ transform:translateY(-1px); filter:brightness(1.05); }
+
+.toc h2{ font-family:var(--font-ui); font-size:.78rem; text-transform:uppercase; letter-spacing:.18em; color:var(--muted); margin:0 0 .8rem; }
+.toc-list{ list-style:none; margin:0; padding:0; counter-reset:none; }
+.toc-list li{ margin:0; }
+.toc-list a{
+  display:flex; gap:1rem; align-items:baseline; text-decoration:none; color:inherit;
+  padding:.8rem .8rem; border-radius:.6rem; border:1px solid transparent;
+  transition:background .15s ease, border-color .15s ease;
+}
+.toc-list a:hover{ background:var(--card); border-color:var(--rule); }
+.toc-num{ font-family:var(--font-ui); font-size:.85rem; font-weight:700; color:var(--accent); min-width:2ch; }
+.toc-text{ display:flex; flex-direction:column; gap:.15rem; }
+.toc-title{ font-size:1.12rem; font-weight:600; }
+.toc-meta{ font-family:var(--font-ui); font-size:.74rem; color:var(--muted); line-height:1.4; }
+.cover-foot{ margin-top:2.5rem; padding-top:1.4rem; border-top:1px solid var(--rule); }
+.cover-foot p{ font-family:var(--font-ui); font-size:.74rem; color:var(--muted); text-align:center; }
+
+/* chapter */
+.chapter{ max-width:var(--maxw); margin:0 auto; padding:clamp(1.2rem,5vw,2.5rem) clamp(1rem,5vw,1.5rem) 5rem; }
+.ch-head{ text-align:center; margin:1rem 0 2.4rem; }
+.ch-counter{ font-family:var(--font-ui); text-transform:uppercase; letter-spacing:.2em; font-size:.7rem; color:var(--accent); margin:0 0 .6rem; }
+.ch-title{ font-size:clamp(1.7rem,6vw,2.4rem); line-height:1.1; margin:.2rem 0 .8rem; font-weight:700; }
+.ch-meta{ font-family:var(--font-ui); font-size:.78rem; color:var(--muted); font-style:normal; line-height:1.5; max-width:30rem; margin:0 auto; }
+
+.ch-body{ }
+.ch-body p{ margin:0 0 1.15rem; text-align:left; hyphens:auto; }
+.ch-body p:first-of-type{ }
+/* drop-cap on the first paragraph after the header */
+.ch-body > p:first-of-type::first-letter{
+  font-size:3.1em; line-height:.8; float:left; padding:.05em .08em 0 0; color:var(--accent); font-weight:700;
+}
+.ch-body h2{ font-family:var(--font-ui); font-size:1rem; letter-spacing:.04em; margin:2.2rem 0 1rem; }
+.ch-body h3{ font-family:var(--font-ui); font-size:.9rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:2rem 0 1rem; }
+.ch-body em{ font-style:italic; }
+.ch-body strong{ font-weight:700; }
+hr.scene-break{
+  border:0; text-align:center; margin:2.2rem 0;
+}
+hr.scene-break::before{
+  content:"❧"; color:var(--accent); font-size:1.1rem; letter-spacing:.5em;
+}
+
+/* chapter nav */
+.ch-nav{
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--rule);
+  font-family:var(--font-ui); font-size:.9rem; font-weight:600;
+}
+.ch-nav a{ color:var(--accent); text-decoration:none; padding:.4rem 0; }
+.ch-nav a:hover{ text-decoration:underline; }
+.ch-nav .disabled{ color:var(--muted); opacity:.5; }
+.nav-home{ color:var(--muted) !important; }
+
+@media (max-width:480px){
+  .toc-list a{ padding:.7rem .4rem; }
+  .ch-nav{ font-size:.82rem; }
+}
+@media print{
+  .toolbar,#progress,.ch-nav{ display:none; }
+  body{ background:#fff; color:#000; }
+}

@@ -5,10 +5,10 @@ Target: 300,000–400,000 words · ~105 chapters · 7 volumes
 ## Word count
 | Chapter | Title | Words (approx) | Status |
 |---|---|---|---|
-| 1 | The Sixth Birthday | ~3,800 | drafted |
-| 2 | The Tanner's Price | ~3,700 | drafted |
-| 3 | Smoke on the Treeline | ~4,300 | drafted |
-| **Total** | | **~11,800** | **3 / ~105 chapters** |
+| 1 | The Sixth Birthday | 2,962 | drafted |
+| 2 | The Tanner's Price | 3,065 | drafted |
+| 3 | Smoke on the Treeline | 3,629 | drafted |
+| **Total** | | **9,656** | **3 / ~105 chapters** |
 
 ## Next up (Vol 1 remaining)
 - ch 4 — What the Forest Charges (grief, the blind, acting principle deepened, first Tide-flicker on a stalk)

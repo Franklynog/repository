@@ -7,10 +7,12 @@
 
 ## 1. Premise & Tags
 
-**Logline:** In a world where a soul master's worth is read from a crystal, six-year-old
-Huo Yuan's crystal reads zero — because his power was never a martial soul at all. It is a
-Sequence: the shattered inheritance of a dead war god, climbed one dangerous role at a
-time, from Hunter to Red Priest. To finish the climb he must out-hunt the cult that
+**Logline:** At six-year-old Huo Yuan's awakening, his martial soul manifests as a
+faceless priest in wound-red robes — and the crystal beneath his hand reads zero. Spirit
+Hall files him as a powerless freak: an idol soul with nothing in it. But the figure is
+no martial soul. It is the Vestige — the shadow of a dead war god's shattered seat, cast
+through his flesh — and the power to fill that shadow must be climbed one dangerous role
+at a time, from Hunter to Red Priest. To finish the climb he must out-hunt the cult that
 murdered his father, out-scheme Spirit Hall, and out-act the madness that consumed every
 climber before him.
 
@@ -65,11 +67,21 @@ A mortal who performs the rituals in order climbs the dead god's path:
    → loss of language → berserk. If he ever kills a defenseless innocent while lost in
    the Tide, the digestion corrupts permanently (this is what broke previous climbers).
    Anchors against the Tide: his ledger habit (counting), mother's pendant, later Qingyi.
-4. **Crystals read him as zero.** His power is physical/sequence-based, invisible to
-   Spirit Hall's detection tools. He has true soul power (it gates his climbs) but it
-   nests *in his flesh*, not in a martial soul. Blessing: he is undetectable. Curse: he is
-   "trash" to the world, and no soul tool, ring-assessment, or seal designed for martial
-   souls works on him — including healing arts that target the martial soul.
+4. **The Vestige & the zero reading.** His martial soul *manifestation* is the
+   **Crimson Vestige**: a faceless priest, a door-and-a-half tall, robes "the red of a
+   wound gone old," gauntleted hands folded graveside-fashion, wind goes around it, smell
+   of cold incense and hot iron (all est. ch 1). It is the shadow of the god's seat cast
+   through his flesh — a *shape his power will fill*, not a container of power. Hence the
+   crystal reads **soul power: zero**; Spirit Hall's file says "idol-type tool soul,
+   unidentified; powerless." He cannot summon it at will at Sequence 9 (tried ch 1; the
+   path answered *climb*). **Manifestation schedule:** it appears on its own at each
+   Sequence ritual and at mortal extremity, growing more solid and detailed with every
+   Sequence climbed — a visible ladder of his progress; voluntary summoning unlocks at
+   Sequence 7; at Sequence 0 it is "no shadow." His true soul power gates his climbs but
+   nests in his flesh: no soul tool, ring-assessment, or seal designed for martial souls
+   works on him — including healing arts that target the martial soul. Blessing: his
+   *strength* is unweighable. Curse: his *face* is memorable — fifty-one villagers saw
+   the red priest, and Spirit Hall has it on paper.
 5. **Rings fuse into flesh, not soul.** When he absorbs a spirit ring, it dissolves into
    his body: no visible ring, no discrete ring-ability. Instead the beast's nature flavors
    his current Sequence powers (recorded per ring below). Ring age limits still apply to
@@ -181,7 +193,8 @@ A mortal who performs the rituals in order climbs the dead god's path:
 ## 5. Timeline
 - **Y0:** Yuan born (parallel to Tang San's birth).
 - **Y4:** Shen Wan dies ("wasting illness" / secretly Covenant poison).
-- **Y6, spring:** ch 1–2 — awakening ceremony (crystal zero); shard night; Old Ge's
+- **Y6, spring:** ch 1–2 — awakening ceremony: the Vestige manifests before the whole
+  village, crystal reads zero, filed as powerless idol soul; shard night; Old Ge's
   pact; apprenticeship begins. Autumn Y6: peddler brings word of grey men four villages
   west asking "have any of your children dreamed red?" (silver for a yes).
 - **Y7, sixth month:** ch 3 — Covenant raid on Lieshan (6 raiders incl. 1 hound).
@@ -211,7 +224,10 @@ A mortal who performs the rituals in order climbs the dead god's path:
 | Hunter's Brand itches *with direction*; near Covenant it climbs flea-bite → wasp → burn (burn = hours away) | ch 1, calibrated ch 3 | planted (recurring tell) |
 | Yuan's ledger as Tide-anchor ("a rope of numbers") | ch 2 | planted; **first payoff ch 3** (counts himself out of the Tide on the ridge); pays again Vol 5 via Qingyi |
 | The grudge-ledger ("Owed: one father. One mother (suspected; unproven). The account stays open.") | ch 3 | planted — note Yuan already *suspects* the mother debt; Vol 4 confirms |
-| Examiner's "absence is a shape too" report to the Deacon in Yanshui | ch 2 | planted (pays Vol 2 & Vol 4; examiner unnamed so far) |
+| Examiner's report to the Deacon in Yanshui: "idol-type tool soul, unidentified; soul power zero" + "a nameless thing is a shape too" | ch 1–2 | planted (pays Vol 2 & Vol 4; examiner unnamed so far) |
+| The Vestige solidifies with each Sequence climbed (visible ladder; voluntary summon at Seq 7; "no shadow" at Seq 0) | ch 1 | planted (recurring payoff at every ritual) |
+| The village, pressed at the well, gave up "the ghost-priest boy"; Yuan chose never to learn who spoke | ch 3 | planted (the Covenant now has his description; feeds ch 5 hounds & Vol 2 caution; the "never learned who" is a mercy he gives Lieshan — may be tested if he returns) |
+| Old Ge named the Vestige's exact red ("a wound gone old") without having been on the hill | ch 1 | planted (tell for his past; pays with his confession Vol 3) |
 | Father's iron chest: discharge letter naming **Ash Hollow** / "the grey heresy", and the grey-iron token (nine radiating lines, ninth broken) + father's note ("It will come again") | ch 3 | planted (Vol 6 map-key; the token opens Covenant safehouses) |
 | Mother's pendant: teardrop stone "neither red nor black but both," warm like the shard, silences the brand-itch when touched to the scar | ch 3 | planted (truth Vol 4: Shen Wan was a custodian bloodline; pendant is a shard *key*) |
 | Mother's unread letters in the chest | ch 3 | planted (Yuan reads them across Vol 1–2; one matters in Vol 4) |
@@ -226,7 +242,9 @@ A mortal who performs the rituals in order climbs the dead god's path:
 - 3rd person limited, past tense, Yuan POV default; rare single-scene other-POV
   (antagonist interludes ≤1 per volume, labeled).
 - Numbers Yuan counts are always given exactly ("eleven arrows, three good").
-- Sequence names capitalized; the Tide always "the Crimson Tide" or "the Tide."
+- Sequence names capitalized; the Tide always "the Crimson Tide" or "the Tide"; the
+  manifestation always "the Vestige" (Yuan's father called it "the tall fellow,"
+  the village says "the ghost-priest" — keep all three registers).
 - Chinese-style naming, family name first (Huo Yuan, Lan Qingyi).
 - Chapter headers: `Chapter N — Title` + volume tag + Yuan's age on first chapter of
   each in-story year.

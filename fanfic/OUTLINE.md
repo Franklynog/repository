@@ -31,10 +31,13 @@ resolution and get fully beat-mapped one volume ahead of drafting.
 two rituals' knowledge, his first soul ring, and a debt-ledger with the Covenant's
 name at the top.*
 
-1. **The Sixth Birthday** — Awakening ceremony; crystal reads zero; village scorn;
-   that night the shrine hill burns red, the shard brands his palm, the voice names
-   him *Hunter, Sequence Nine — S-rank, physical*. Turn: trash → secretly chosen.
-   Hook: Old Ge sees the brand and goes grey in the face.
+1. **The Sixth Birthday** — Awakening ceremony; his martial soul manifests as the
+   Vestige (faceless wound-red priest) before the whole village — and the crystal
+   reads zero; filed as a powerless idol soul; scorn curdled with fear ("ghost-
+   priest"). That night the shrine hill burns red, the shard brands his palm, the
+   voice names the figure the shadow of a dead god's seat and names him *Hunter,
+   Sequence Nine — S-rank, physical*. Turn: feared freak → secretly chosen.
+   Hook: Old Ge knew the robes' exact red without being on the hill.
 2. **The Tanner's Price** — Old Ge corners him; tests the brand with fire; reveals the
    bare minimum (a path, a price, a rule: *act the hunt, never become the kill*).
    Training begins disguised as tannery chores. Ledger habit starts. Meanwhile Deacon

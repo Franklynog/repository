@@ -15,7 +15,8 @@ crescent, not touching it, the way a man keeps his thumb shy of a blade he respe
 
 "The examiner?"
 
-"Tested him yesterday. Zero. Both readings. The scar came last night."
+"Tested him yesterday. The whole hill watched the red fellow stand up, and the glass
+read zero underneath it. Both readings. The scar came last night."
 
 "Last night," Old Ge repeated. He let the hand go and sat back, and the stool creaked
 under him, and for a while the only sound was the slow glug of the soaking vats. He
@@ -49,15 +50,18 @@ the light came up under all their faces.
 
 "The words. Exact."
 
-"It said an heir is registered. It said: class, Hunter. The ninth Sequence of the
-Crimson Path. It said my order was — physical. That the flesh is the temple and the
-weapon, that no glass would read it and no hall would hold it. It said my grade was S.
-The highest. That I was the only one living who was — sufficient. To climb." The words
-felt too big for the tannery, for his mouth, for six years old; he said them anyway,
-in order, unsmoothed. "It said to hunt. To act the role until the role is true. It
-said the path climbs through nine names and at the top there's a dead god's empty
-chair. It said the price of climbing wrong is the Tide, and the price of stopping is
-being eaten, and the price of the chair is everything. Then it said: begin."
+"It said an heir is registered, and the Vestige stood for me at my waking. It said
+what the glass-priests saw is the shadow of a dead god's seat, cast through my flesh —
+not my power. The shape my power will fill, name by name, if I climb. It said: class,
+Hunter. The ninth Sequence of the Crimson Path. My order — physical. The flesh is the
+temple and the weapon, and the figure is the temple's shadow; no glass will weigh it,
+no hall will hold it. It said my grade was S. The highest. That I was the only one
+living who was — sufficient. To climb." The words felt too big for the tannery, for
+his mouth, for six years old; he said them anyway, in order, unsmoothed. "It said to
+hunt. To act the role until the role is true. It said the path climbs through nine
+names, and at the summit the Vestige is no shadow, and the chair beneath it is empty.
+It said the price of climbing wrong is the Tide, and the price of stopping is being
+eaten, and the price of the chair is everything. Then it said: begin."
 
 The lamp flame stood up straight in the still air. Old Ge's face, lit from below, was
 a country of gullies, and nothing moved in it.
@@ -85,10 +89,14 @@ the black like a moon through cloud.
 
 His father sat back down slowly, the way a tree decides not to fall.
 
-"That's the first proof," Old Ge said. "Glass reads nothing because there's nothing
-where glass looks. Crystal listens for a martial soul — a thing that lives beside a
-man. His lives *in* him now. In the meat. Fire is the second proof; the Path was born
-in fire, and fire knows its own." He pinched the candle out with two bark-stained
+"That's the first proof," Old Ge said. "The priest on the hill was the second, for
+any eyes that knew the red. And the glass makes a third, in its blind way: crystal
+weighs what a martial soul holds, and that figure holds nothing — it isn't a soul
+standing beside him, it's a shadow thrown *through* him, by what's gone into the
+meat. The seat, remembering its own shape. His power doesn't pool where glass can
+dip; it's in the marrow, and it will be in the marrow at rank ninety as surely as
+now. And the fire makes a fourth; the Path was born in fire, and fire knows its
+own." He pinched the candle out with two bark-stained
 fingers. "I'll tell you what I'd have given my good leg to be told at the start, and
 then I'll tell you the price of my teaching, and the price is not small.
 
@@ -213,10 +221,11 @@ a sum that meant trouble. Yuan had seen him walk in the yard that morning. He ha
 stooped then. "The boy's strong and his hands mind him. I work him fair."
 
 "I'm sure." The examiner looked at Yuan a beat longer. "No soreness since the testing,
-boy? No fevers, lights, dreams?" The questions were laid down gently, like snares are.
-"Spirit Hall asks after its zeros, you know. The Hall records everything — His Grace
-the Deacon in Yanshui is particular about records. Even absences. *Especially*
-absences. An absence, you see, is a shape too."
+boy? No fevers, lights, dreams? Has the red fellow stood again?" The questions were
+laid down gently, like snares are. "Spirit Hall asks after its oddities, you know. The
+Hall records everything — His Grace the Deacon in Yanshui is particular about records.
+Even souls with nothing in them. *Especially* souls no one can name. A nameless thing,
+you see, is a shape too."
 
 The crescent scar lay quiet against the scraping-beam. Yuan looked up with the dull,
 willing face he'd been practicing on the hides, and said: "I had a dream the millstone

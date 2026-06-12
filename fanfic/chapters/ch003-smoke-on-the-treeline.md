@@ -26,9 +26,15 @@ The third part, as the old man had finally laid it out, was simple the way a sna
 simple. When the burn came, Yuan and his father would go — out the back pasture, over
 the creek at the dry stones, to the blind two valleys deep that they had spent the
 spring stocking, and they would not stop, look back, or come back, for three days.
-The village would be left to answer honestly, because the village honestly knew
-nothing: a zero-rated boy had apprenticed to the tanner, the shrine was a stone, and
-nobody in Lieshan had dreamed red.
+The village would be left to answer as best it could, and its best was good, because
+everything Lieshan knew, Spirit Hall had already written down: the strangest thing in
+the village was the tanner's boy, whose freak of an idol-soul had stood up red in
+front of fifty-one people and read *zero* — powerless, honored sirs, the Hall's own
+glass said so, a picture of a feast — and who'd been put to scraping hides like any
+other mouth. "A registered freak is a scarecrow," Old Ge said. "It stands in plain
+sight and frightens nothing worth frightening. Paper's the best false scent there is,
+and the Hall wrote ours for us, free of charge. What paper can't beat is a hound's
+nose on a warm boy. So when they come, the boy is elsewhere."
 
 "And you?" Yuan's father had asked.
 
@@ -73,7 +79,10 @@ went on four legs and was not a dog, though it had started as one. They had come
 the west road at supper-time, polite as priests, and asked the headman the question,
 and the headman, who was brave and stupid in the way of small authority, had lied to
 them badly. So they had put his arm wrong at the elbow, and fired the Wei barn to
-light the square, and gathered the village to the well to ask everyone else.
+light the square, and gathered the village to the well to ask everyone else. And what
+the well gave them, in the end — Yuan never learned from whom, and chose all his life
+never to learn — was not red dreams but the next best thing, the only coin Lieshan
+had: *the ghost-priest. The tanner's boy. The one whose soul stood up red and empty.*
 
 Yuan saw most of it from the smoke-house ridge, flat in the dock weeds, because his
 father had stopped at the pasture gate and looked down at the burning, and Yuan had
@@ -319,9 +328,10 @@ pipe, didn't light it.
 worth having, which is time. But hear what comes now, cub, because it comes sure as
 frost." Old Ge looked down at the village, the gap in its roofline like a pulled
 tooth, the smell of wet char that wouldn't leave till spring. "A marked man walks
-back to his masters with this story: the shard-nest was cold, the village knew
-nothing, and the cold nothing village somewhere in it had a sergeant of Ash Hollow,
-an old man, and a trap-line, and it cost him four of six. Grey men are not like
+back to his masters with this story: the shard-nest was cold, the village had
+one coin and spent it, and the village with one coin somewhere in it had a sergeant
+of Ash Hollow, an old man, a trap-line, and a ghost-souled boy the glass had sworn
+was empty — and it cost him four of six. Grey men are not like
 other men; loss doesn't anger them, it *interests* them." He put the cold pipe in
 his teeth. "They'll mark the village answered. Then they'll come back to count."
 

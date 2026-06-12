@@ -423,6 +423,107 @@ JS = r"""
 # Build
 # --------------------------------------------------------------------------- #
 
+def build_single_file(chapters: list[dict]) -> str:
+    """One self-contained .html with everything inline — ideal for phones/offline."""
+    total_words = sum(c["words"] for c in chapters)
+
+    toc_items = []
+    for i, ch in enumerate(chapters, 1):
+        meta = f'<span class="toc-meta">{ch["meta"]}</span>' if ch["meta"] else ""
+        toc_items.append(
+            f'<li><a href="#ch{i}"><span class="toc-num">{i:02d}</span>'
+            f'<span class="toc-text"><span class="toc-title">{html.escape(ch["title"])}</span>'
+            f"{meta}</span></a></li>"
+        )
+    toc = "\n".join(toc_items)
+
+    sections = []
+    for i, ch in enumerate(chapters, 1):
+        meta = f'<p class="ch-meta">{ch["meta"]}</p>' if ch["meta"] else ""
+        nav_up = '<a class=" js-top" href="#top">↑ Contents</a>'
+        nav_next = f'<a href="#ch{i+1}">Next →</a>' if i < len(chapters) else '<span class="disabled">Finis</span>'
+        nav_prev = f'<a href="#ch{i-1}">← Previous</a>' if i > 1 else '<a href="#top">← Contents</a>'
+        sections.append(f"""
+<section class="chapter" id="ch{i}">
+  <header class="ch-head">
+    <p class="ch-counter">Chapter {i} of {len(chapters)}</p>
+    <h2 class="ch-title">{html.escape(ch["title"])}</h2>
+    {meta}
+  </header>
+  <div class="ch-body">{ch["body"]}</div>
+  <nav class="ch-nav">{nav_prev}{nav_up}{nav_next}</nav>
+</section>
+""")
+    body_sections = "\n".join(sections)
+
+    return f"""<!DOCTYPE html>
+<html lang="en" data-theme="sepia">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#9a2c1f" />
+<title>{html.escape(SITE_TITLE)}</title>
+<style>{CSS}
+/* single-file extras */
+.singlefile .chapter{{ border-top:1px solid var(--rule); padding-top:3rem; }}
+.singlefile .chapter:first-of-type{{ border-top:0; }}
+.ch-nav a.disabled,.ch-nav span.disabled{{ color:var(--muted); opacity:.5; }}
+#totop{{ position:fixed; right:1rem; bottom:1rem; z-index:45; display:none;
+  font-family:var(--font-ui); font-size:.8rem; font-weight:700; color:#fff;
+  background:var(--accent); border:0; border-radius:50%; width:2.8rem; height:2.8rem;
+  box-shadow:0 2px 10px var(--shadow); cursor:pointer; }}
+</style>
+</head>
+<body class="singlefile">
+<div id="progress"><div id="progress-bar"></div></div>
+
+<div class="toolbar">
+  <a class="tb-btn home" href="#top">☰ Contents</a>
+  <div class="tb-spacer"></div>
+  <button class="tb-btn" data-action="font-dec" title="Smaller text">A−</button>
+  <button class="tb-btn" data-action="font-inc" title="Larger text">A+</button>
+  <button class="tb-btn" data-action="theme" title="Toggle theme">◑ Theme</button>
+</div>
+
+<main class="cover" id="top">
+  <header class="cover-head">
+    <p class="kicker">{html.escape(SITE_SUBTITLE)}</p>
+    <h1 class="cover-title">{html.escape(SITE_TITLE)}</h1>
+    <p class="cover-blurb">A man from our world is reborn on the Douluo Continent
+      with a martial soul shaped from the Red&nbsp;Priest pathway&mdash;war, fire,
+      plunder, and blood&mdash;stripped of the madness that should have been its
+      price. He pays no cost for power. Everything around him does.</p>
+    <p class="cover-stats">{len(chapters)} chapters &middot; {total_words:,} words &middot; one offline file</p>
+  </header>
+  <nav class="toc">
+    <h2>Contents</h2>
+    <ol class="toc-list">{toc}</ol>
+  </nav>
+</main>
+
+{body_sections}
+
+<button id="totop" title="Back to contents">↑</button>
+<script>
+(function(){{
+  var THEMES=["light","sepia","dark"],root=document.documentElement;
+  try{{var t=localStorage.getItem("ccg-theme");if(t)root.setAttribute("data-theme",t);
+    var f=parseFloat(localStorage.getItem("ccg-fs"));if(f)root.style.setProperty("--fs",f+"rem");}}catch(e){{}}
+  function curFs(){{var n=parseFloat(getComputedStyle(root).getPropertyValue("--fs"));return isNaN(n)?1.18:n;}}
+  function setFs(n){{n=Math.max(0.9,Math.min(1.6,n));root.style.setProperty("--fs",n+"rem");try{{localStorage.setItem("ccg-fs",n);}}catch(e){{}}}}
+  function cycle(){{var c=root.getAttribute("data-theme")||"sepia",x=THEMES[(THEMES.indexOf(c)+1)%THEMES.length];root.setAttribute("data-theme",x);try{{localStorage.setItem("ccg-theme",x);}}catch(e){{}}}}
+  document.addEventListener("click",function(e){{var b=e.target.closest("[data-action]");if(!b)return;var a=b.getAttribute("data-action");if(a==="theme")cycle();else if(a==="font-inc")setFs(curFs()+0.06);else if(a==="font-dec")setFs(curFs()-0.06);}});
+  var bar=document.getElementById("progress-bar"),totop=document.getElementById("totop");
+  function onScroll(){{var h=document.documentElement,max=h.scrollHeight-h.clientHeight,p=max>0?h.scrollTop/max*100:0;if(bar)bar.style.width=p+"%";if(totop)totop.style.display=h.scrollTop>600?"block":"none";}}
+  document.addEventListener("scroll",onScroll,{{passive:true}});window.addEventListener("resize",onScroll);onScroll();
+  if(totop)totop.addEventListener("click",function(){{window.scrollTo({{top:0,behavior:"smooth"}});}});
+}})();
+</script>
+</body>
+</html>
+"""
+
+
 def word_count(md: str) -> int:
     text = re.sub(r"[*_#>\-]", " ", md)
     return len(text.split())
@@ -459,6 +560,10 @@ def main():
         (OUT_DIR / f'{ch["slug"]}.html').write_text(page, encoding="utf-8")
 
     (OUT_DIR / "index.html").write_text(build_index(chapters), encoding="utf-8")
+
+    # single self-contained file (great for phones / offline / sending)
+    single_name = "crucible-of-the-crimson-god.html"
+    (OUT_DIR / single_name).write_text(build_single_file(chapters), encoding="utf-8")
 
     # tiny manifest for tooling
     manifest = {

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="sepia">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#9a2c1f" />
+<title>Crucible of the Crimson God</title>
+<style>
+:root{
+  --maxw: 42rem;
+  --fs: 1.18rem;
+  --lh: 1.75;
+  --font-body: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --font-ui: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+html[data-theme="light"]{ --bg:#faf9f7; --fg:#1d1b18; --muted:#6b6258; --rule:#e0d8cc; --accent:#9a2c1f; --card:#ffffff; --shadow:rgba(0,0,0,.06); }
+html[data-theme="sepia"]{ --bg:#f4ecd8; --fg:#3b3122; --muted:#7a6a4f; --rule:#ddccab; --accent:#9a2c1f; --card:#fbf5e6; --shadow:rgba(80,60,20,.10); }
+html[data-theme="dark"]{ --bg:#15130f; --fg:#e7ddca; --muted:#a2937a; --rule:#332c20; --accent:#e0613f; --card:#1d1a14; --shadow:rgba(0,0,0,.5); }
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:var(--font-body);
+  font-size:var(--fs); line-height:var(--lh);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition:background .3s ease,color .3s ease;
+}
+
+/* progress bar */
+#progress{ position:fixed; top:0; left:0; right:0; height:3px; background:transparent; z-index:50; }
+#progress-bar{ height:100%; width:0; background:var(--accent); transition:width .1s linear; }
+
+/* toolbar */
+.toolbar{
+  position:sticky; top:0; z-index:40;
+  display:flex; align-items:center; gap:.4rem;
+  padding:.5rem clamp(.8rem,4vw,1.5rem);
+  background:color-mix(in srgb,var(--bg) 86%, transparent);
+  backdrop-filter:saturate(140%) blur(8px);
+  border-bottom:1px solid var(--rule);
+  font-family:var(--font-ui);
+}
+.tb-spacer{ flex:1; }
+.tb-btn{
+  font-family:var(--font-ui); font-size:.82rem; font-weight:600;
+  color:var(--muted); background:transparent; border:1px solid var(--rule);
+  border-radius:.5rem; padding:.32rem .6rem; cursor:pointer; text-decoration:none;
+  transition:all .15s ease; white-space:nowrap;
+}
+.tb-btn:hover{ color:var(--fg); border-color:var(--accent); }
+.tb-btn.home{ border-color:transparent; }
+
+/* cover / index */
+.cover{ max-width:var(--maxw); margin:0 auto; padding:clamp(1.5rem,6vw,4rem) clamp(1rem,5vw,1.5rem) 4rem; }
+.cover-head{ text-align:center; border-bottom:1px solid var(--rule); padding-bottom:2rem; margin-bottom:2rem; }
+.kicker{ font-family:var(--font-ui); text-transform:uppercase; letter-spacing:.22em; font-size:.72rem; color:var(--accent); margin:.2rem 0 .6rem; }
+.cover-title{ font-size:clamp(2.2rem,8vw,3.4rem); line-height:1.05; margin:.2rem 0 1rem; font-weight:700; letter-spacing:-.01em; }
+.cover-blurb{ color:var(--fg); font-size:1.05rem; max-width:34rem; margin:0 auto 1.2rem; }
+.cover-stats{ font-family:var(--font-ui); font-size:.8rem; color:var(--muted); letter-spacing:.03em; margin:.4rem 0 1.4rem; }
+.start-btn{
+  display:inline-block; font-family:var(--font-ui); font-weight:700; font-size:.95rem;
+  background:var(--accent); color:#fff; text-decoration:none;
+  padding:.7rem 1.4rem; border-radius:.6rem; box-shadow:0 2px 10px var(--shadow);
+  transition:transform .12s ease, filter .12s ease;
+}
+.start-btn:hover{ transform:translateY(-1px); filter:brightness(1.05); }
+
+.toc h2{ font-family:var(--font-ui); font-size:.78rem; text-transform:uppercase; letter-spacing:.18em; color:var(--muted); margin:0 0 .8rem; }
+.toc-list{ list-style:none; margin:0; padding:0; counter-reset:none; }
+.toc-list li{ margin:0; }
+.toc-list a{
+  display:flex; gap:1rem; align-items:baseline; text-decoration:none; color:inherit;
+  padding:.8rem .8rem; border-radius:.6rem; border:1px solid transparent;
+  transition:background .15s ease, border-color .15s ease;
+}
+.toc-list a:hover{ background:var(--card); border-color:var(--rule); }
+.toc-num{ font-family:var(--font-ui); font-size:.85rem; font-weight:700; color:var(--accent); min-width:2ch; }
+.toc-text{ display:flex; flex-direction:column; gap:.15rem; }
+.toc-title{ font-size:1.12rem; font-weight:600; }
+.toc-meta{ font-family:var(--font-ui); font-size:.74rem; color:var(--muted); line-height:1.4; }
+.cover-foot{ margin-top:2.5rem; padding-top:1.4rem; border-top:1px solid var(--rule); }
+.cover-foot p{ font-family:var(--font-ui); font-size:.74rem; color:var(--muted); text-align:center; }
+
+/* chapter */
+.chapter{ max-width:var(--maxw); margin:0 auto; padding:clamp(1.2rem,5vw,2.5rem) clamp(1rem,5vw,1.5rem) 5rem; }
+.ch-head{ text-align:center; margin:1rem 0 2.4rem; }
+.ch-counter{ font-family:var(--font-ui); text-transform:uppercase; letter-spacing:.2em; font-size:.7rem; color:var(--accent); margin:0 0 .6rem; }
+.ch-title{ font-size:clamp(1.7rem,6vw,2.4rem); line-height:1.1; margin:.2rem 0 .8rem; font-weight:700; }
+.ch-meta{ font-family:var(--font-ui); font-size:.78rem; color:var(--muted); font-style:normal; line-height:1.5; max-width:30rem; margin:0 auto; }
+
+.ch-body{ }
+.ch-body p{ margin:0 0 1.15rem; text-align:left; hyphens:auto; }
+.ch-body p:first-of-type{ }
+/* drop-cap on the first paragraph after the header */
+.ch-body > p:first-of-type::first-letter{
+  font-size:3.1em; line-height:.8; float:left; padding:.05em .08em 0 0; color:var(--accent); font-weight:700;
+}
+.ch-body h2{ font-family:var(--font-ui); font-size:1rem; letter-spacing:.04em; margin:2.2rem 0 1rem; }
+.ch-body h3{ font-family:var(--font-ui); font-size:.9rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:2rem 0 1rem; }
+.ch-body em{ font-style:italic; }
+.ch-body strong{ font-weight:700; }
+hr.scene-break{
+  border:0; text-align:center; margin:2.2rem 0;
+}
+hr.scene-break::before{
+  content:"❧"; color:var(--accent); font-size:1.1rem; letter-spacing:.5em;
+}
+
+/* chapter nav */
+.ch-nav{
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--rule);
+  font-family:var(--font-ui); font-size:.9rem; font-weight:600;
+}
+.ch-nav a{ color:var(--accent); text-decoration:none; padding:.4rem 0; }
+.ch-nav a:hover{ text-decoration:underline; }
+.ch-nav .disabled{ color:var(--muted); opacity:.5; }
+.nav-home{ color:var(--muted) !important; }
+
+@media (max-width:480px){
+  .toc-list a{ padding:.7rem .4rem; }
+  .ch-nav{ font-size:.82rem; }
+}
+@media print{
+  .toolbar,#progress,.ch-nav{ display:none; }
+  body{ background:#fff; color:#000; }
+}
+
+/* single-file extras */
+.singlefile .chapter{ border-top:1px solid var(--rule); padding-top:3rem; }
+.singlefile .chapter:first-of-type{ border-top:0; }
+.ch-nav a.disabled,.ch-nav span.disabled{ color:var(--muted); opacity:.5; }
+#totop{ position:fixed; right:1rem; bottom:1rem; z-index:45; display:none;
+  font-family:var(--font-ui); font-size:.8rem; font-weight:700; color:#fff;
+  background:var(--accent); border:0; border-radius:50%; width:2.8rem; height:2.8rem;
+  box-shadow:0 2px 10px var(--shadow); cursor:pointer; }
+</style>
+</head>
+<body class="singlefile">
+<div id="progress"><div id="progress-bar"></div></div>
+
+<div class="toolbar">
+  <a class="tb-btn home" href="#top">☰ Contents</a>
+  <div class="tb-spacer"></div>
+  <button class="tb-btn" data-action="font-dec" title="Smaller text">A−</button>
+  <button class="tb-btn" data-action="font-inc" title="Larger text">A+</button>
+  <button class="tb-btn" data-action="theme" title="Toggle theme">◑ Theme</button>
+</div>
+
+<main class="cover" id="top">
+  <header class="cover-head">
+    <p class="kicker">A Soul Land fanfiction</p>
+    <h1 class="cover-title">Crucible of the Crimson God</h1>
+    <p class="cover-blurb">A man from our world is reborn on the Douluo Continent
+      with a martial soul shaped from the Red&nbsp;Priest pathway&mdash;war, fire,
+      plunder, and blood&mdash;stripped of the madness that should have been its
+      price. He pays no cost for power. Everything around him does.</p>
+    <p class="cover-stats">5 chapters &middot; 15,978 words &middot; one offline file</p>
+  </header>
+  <nav class="toc">
+    <h2>Contents</h2>
+    <ol class="toc-list"><li><a href="#ch1"><span class="toc-num">01</span><span class="toc-text"><span class="toc-title">Chapter 1 — The Cold Road</span><span class="toc-meta">Lu Yan, age 6 · Spirit Apprentice (rank 0, pre-awakening → awakening) · 0 rings · POV: Lu Yan · Slagford, western frontier of the Star Luo Empire</span></span></a></li>
+<li><a href="#ch2"><span class="toc-num">02</span><span class="toc-text"><span class="toc-title">Chapter 2 — Slag and Cinder</span><span class="toc-meta">Lu Yan, age 6 · Spirit Apprentice (rank 11, concealed) · 0 rings · POV: Lu Yan · Slagford</span></span></a></li>
+<li><a href="#ch3"><span class="toc-num">03</span><span class="toc-text"><span class="toc-title">Chapter 3 — What the Strong Owe</span><span class="toc-meta">Lu Yan, age 6 · Spirit Apprentice (rank 12, concealed) · 0 rings · POV: Lu Yan · Slagford</span></span></a></li>
+<li><a href="#ch4"><span class="toc-num">04</span><span class="toc-text"><span class="toc-title">Chapter 4 — The Ashwood</span><span class="toc-meta">Lu Yan, age 6 · Spirit Apprentice (rank 13, concealed) · 0 rings · POV: Lu Yan · The Ashwood, western wildlands</span></span></a></li>
+<li><a href="#ch5"><span class="toc-num">05</span><span class="toc-text"><span class="toc-title">Chapter 5 — The Floor He Laid</span><span class="toc-meta">Lu Yan, age 6 · Spirit Master (rank 14, concealed) · 1 ring (purple) · POV: Lu Yan · The Ashwood</span></span></a></li></ol>
+  </nav>
+</main>
+
+
+<section class="chapter" id="ch1">
+  <header class="ch-head">
+    <p class="ch-counter">Chapter 1 of 5</p>
+    <h2 class="ch-title">Chapter 1 — The Cold Road</h2>
+    <p class="ch-meta">Lu Yan, age 6 · Spirit Apprentice (rank 0, pre-awakening → awakening) · 0 rings · POV: Lu Yan · Slagford, western frontier of the Star Luo Empire</p>
+  </header>
+  <div class="ch-body"><hr class="scene-break" />
+<p>Chen Mo died the way most people do — without ceremony, in the wrong place, over nothing.</p>
+<p>There had been ice on the overpass and a delivery he could have refused. There had been the particular orange of sodium streetlights on wet asphalt, a color he had seen ten thousand nights and never once thought of as the last thing he would see. There had been a horn, very loud and very brief. Then there had been a long quiet that was not sleep, because in sleep some part of you keeps watch, and in this quiet nothing watched at all.</p>
+<p>He had read enough stories to know what was supposed to happen next. A voice. A system panel glowing in the dark. A god with an apology and a contract. He waited for it with the mild, detached curiosity that had been his defining trait in life — the temperament of a man who read about other people's adventures because he had never been able to feel his own with any urgency.</p>
+<p>Nothing came. The quiet simply thinned, the way fog thins, until it was warmth instead of cold, and pressure instead of weightlessness, and then a scream that he eventually understood was his own.</p>
+<p>That was the cruelty of it, and the mercy. No tutorial. No second chances dangled and withdrawn. Just the slow, undignified, total work of being born again into a body that could not yet hold its own head up, in a world where the sky was the wrong color at dusk — too red, banked like a forge left to cool.</p>
+<p>He had time, lying in that first crib of dried grass and rough wool, to think about what he had lost. He found, examining it carefully, that he had lost very little. A small apartment. A job moving boxes from one shelf to another. A handful of people who would be sad in proportion to how often they had remembered he existed, which was not often. He turned the grief over in his hands like a stone, looking for the sharp edge that should have cut him, and could not find one.</p>
+<p><em>That should worry me,</em> he thought, in the wordless soup of an infant's mind. <em>A man who can lose his whole life and feel only mild interest is a man with something already missing.</em></p>
+<p>He filed the worry away. He would have years to examine it. As it turned out, he would spend most of his life pretending he never had.</p>
+<hr class="scene-break" />
+<p>They named him Lu Yan.</p>
+<p>The <em>Lu</em> was his mother's, the only thing she gave him before the coughing sickness took her in his second winter — a frontier surname, plain as dirt, meaning nothing grander than <em>land</em>. The <em>Yan</em> was the midwife's small joke, or maybe her small prayer: <em>flame</em>, for a baby born blue and silent who should have died and then, without warning, opened his mouth and howled hot enough to fog the cold air. The old women said a child who fought that hard to breathe would either burn bright or burn out. They said it the way frontier people say everything — as a coin-toss, not a blessing.</p>
+<p>Slagford was not a place that produced blessings.</p>
+<p>It crouched at the western hem of the Star Luo Empire where the maps stopped being confident and started using words like <em>approximately</em>. A smelting town, a caravan stop, a scab of stone and slag-heap built where two bad roads met and neither one went anywhere good. To the east, eventually, were the heartlands and the cities and the great Academies he knew only as names from a book he had read in another life. To the west was the Ashwood, and past the Ashwood the wildlands, and in the wildlands the soul beasts that everyone in Slagford fed their dead to and their living, when the tithe came due.</p>
+<p>By the time he was old enough to walk the slag-paths without falling, Lu Yan understood three things about his second world with the cold completeness of a man who had read its instruction manual and now lived inside the machine.</p>
+<p>The first was that this was the Douluo Continent, and he knew its rules. Martial souls. Spirit rings torn from the corpses of beasts. The long ladder of ranks that turned a gutter child into a god if the child climbed hard enough and the ladder did not throw him off. He knew the shape of it the way you know a song you have not heard in years — not every word, but the melody, and where the dangerous notes were.</p>
+<p>The second was that knowing the rules was almost worthless if you were starving. Knowledge was a lever, and a lever needed a place to stand. He had no place to stand. He had a dead mother, a dead father he had never met, a charity cot in the back of the tallhouse where the town's one registered soul master let orphans sleep in exchange for sweeping, and a body that had to grow up one slow, vulnerable year at a time before it could carry any of the things he knew how to do.</p>
+<p>The third thing he understood was the one he tried hardest not to.</p>
+<p>He did not feel things the way the others did.</p>
+<p>He watched the other orphans love and hate and fear with a kind of anthropological patience, taking notes. When Mei Sang cried because the cold had killed the sparrow she'd been keeping warm in her sleeve, he watched the way her whole small body folded around the grief, the way it owned her, and he could name every part of it and feel none of it. When Ke Lang, older and meaner, broke a younger boy's finger to take his bread, Lu Yan felt no anger — only a clean, quick calculation: <em>Ke Lang is strong, undisciplined, and afraid of the dark. Useful, eventually. Not now.</em></p>
+<p>He had been a mild man in his first life. He had thought the mildness was peace. Lying awake in the tallhouse loft, listening to the other children breathe, he began to suspect it had been the same missing thing all along, and that whatever was broken in him had followed him across the gap between worlds, into a place where the broken parts of a person were not punished but <em>rewarded</em>.</p>
+<p>He was almost right.</p>
+<p>He was wrong about which direction the brokenness ran.</p>
+<hr class="scene-break" />
+<p>The awakening came in the autumn of his sixth year, on the morning the frost first held past noon.</p>
+<p>Every child in the Empire was tested at six — that much was law, even out here where the law arrived late and tired. Twice a year a name came down from the tallhouse and the children gathered in the cold yard behind it, where the slag had been cleared to bare rock and a single basin of grey crystal sat on an iron tripod, older than the town, hauled west generations ago and never moved since. The <strong>Spirit-Awakening Crystal</strong>. Cheap, by the standards of the heartlands. Out here it was the most valuable object for two hundred li, and it was guarded by an old man who had been told to guard it and a tally of debts no orphan could ever repay.</p>
+<p>Lu Yan stood in line with eleven other children and waited his turn with the stillness that had already started to make the adults uneasy.</p>
+<p>Mei Sang was ahead of him, hands knotted in her sleeves, breath ghosting fast. When the crystal lit for her it lit soft — a low green, the green of new leaves and damp moss, and a faint coil of pale grass-mist rose from her palms and smelled, absurdly, of summer. A <strong>healing soul.</strong> The examiner, a thin clerk sent up from the prefecture for the season, made a small approving note. <em>Mistgrass</em>, he said. <em>Rank two. Modest. Useful. Spirit Hall buys healers.</em> Mei Sang's face did something complicated and frightened at the word <em>buys</em>. Lu Yan filed that too.</p>
+<p>Ke Lang's crystal lit a dull, angry orange, and his martial soul came up his arm as a coat of coarse grey bristles, a beast-soul, some kind of boar. Rank three. The examiner's note was longer. Frontier soldiers came from boys like that.</p>
+<p>Then it was Lu Yan's turn, and the morning, as it turned out, ended.</p>
+<p>He put his hand to the crystal because that was what you did. He had spent six years preparing for this moment in the cold theater of his own skull, rehearsing indifference, planning for any of a hundred ordinary outcomes. A beast-soul he could hide. A tool-soul he could use. A weak rank he could conceal and a strong rank he could conceal harder, because in a place like Slagford a strong rank did not mean opportunity, it meant you became the tithe instead of paying it.</p>
+<p>He had not planned for the crystal to scream.</p>
+<p>That was the only word for the sound it made — a high, splitting note that was not quite sound, that he felt in his teeth and the wet of his eyes. The grey crystal flushed. Not green, not orange, not the white or gold or pale violet of the prefecture clerk's neat chart of ranks. It went <em>red</em>. A deep, arterial, furnace red that climbed from the crystal's heart and filled it like a struck vein filling a cup, until the old stone basin glowed like a coal and the frost on the iron tripod hissed away to steam.</p>
+<p>And behind Lu Yan, rising out of nothing in the cold yard, something built itself in the air.</p>
+<p>He felt it before he turned to look — felt it the way you feel someone step up close behind you in the dark. A weight. A heat that did not warm. When he turned his head, slow, deliberate, refusing on principle to flinch, he saw it taking shape out of the red light: a thing of black iron and molten seams, broad as a millstone and taller than a man, a great squat <strong>brazier</strong> or altar or forge-mouth, its interior churning with a light that was not fire and behaved like fire and was, he would later understand, neither. Around its rim were channels worn smooth, the way stone is worn smooth by a thousand years of the same liquid running the same path. It hung in the air a handspan above the frozen rock and turned, very slowly, as if to look at the assembled town with no face at all.</p>
+<p>The examiner had come halfway out of his chair. His brush had fallen. His mouth was open on no word.</p>
+<p>And into Lu Yan's right hand, unbidden, settled a weight.</p>
+<p>A weapon. A war-maul — a great two-handed thing of the same black iron, its head a rough block of what looked like cooling slag, veined with the same dull red, far too heavy for the arm of a six-year-old to lift and lifting anyway, light as a willow switch, because the strength to hold it did not come from his arm. It came from the brazier. It came from the part of him the crystal had just dragged up into the light, the part he had carried across the gap between two deaths and never named.</p>
+<p>He knew this thing.</p>
+<p>That was the worst of it, standing in the screaming red light with a god's hammer in a child's fist. He <em>knew</em> it. Not from this world — there was nothing like it in any chart in any prefecture, the examiner's stricken face said as much — but from the other one. From a book he had read on a train, on a couch, in a life that had ended under a sodium light. A pathway of power he had followed page by page in a story about a different world entirely: the <strong>Red Priest.</strong> War and fire and plunder and the long red road of sacrifice. The crucible that took what you fed it and gave back strength, and took, for its strength, a price in the only currency that ever mattered — your own mind, your own self, fed slowly into the furnace until the warrior was gone and only the war was left.</p>
+<p>That was the pathway. That was its drawback, written in every line of the story he had loved: <em>you will become a monster.</em> Power without a leash, that ate the hand that fed it.</p>
+<p>Lu Yan stood in the cold yard with the brazier turning at his back and the maul warm in his fist and the whole town frozen around him in fear, and he reached inward, carefully, the way you reach into a drawer you know has a knife in it, looking for the madness.</p>
+<p>It was not there.</p>
+<p>He searched. He was thorough — he was always thorough. The war-trance was there: he could feel it lying just under his skin like a banked coal, the promise that if he let it rise his reflexes would sharpen and his strength would double and pain would stop being a thing that could reach him. In the story, that was the doorway to the frenzy. That was where reason drowned. He took hold of it, deliberately, a child gripping a live wire to see what it did —</p>
+<p>— and the world went very clear, and very cold, and very <em>quiet.</em></p>
+<p>No rage. No red wash across his thoughts, no hunger snarling up to eat his sense of himself. The opposite. The trance did not flood him; it <em>stilled</em> him, the way deep water is still, the way the inside of a forge is still in the half-second before the bellows blow. He stood in the cold yard and felt his own pulse slow, felt his breathing drop to nothing, felt every detail of the morning arrange itself in front of him with cut-glass exactness — the examiner's dropped brush, the angle of the frightened guards' shoulders, the eleven children and which way each would run, Mei Sang's wide green eyes, Ke Lang's bristling fear, the precise weight of the maul and exactly where, if he chose, he could put it.</p>
+<p>The power had come. The price had not.</p>
+<p>A more emotional man might have laughed, or wept, or fallen to his knees in some appropriate transport of fortune. Lu Yan stood very still and did the arithmetic, because the arithmetic was the only thing he had ever been able to feel with any urgency, and the answer it gave him was so large it took even him a moment to hold the whole of it.</p>
+<p><em>The pathway without the price. The furnace that does not eat the one who feeds it.</em></p>
+<p><em>I can climb this with nothing in me to throw me off.</em></p>
+<p>It did not occur to him, in that first clean cold moment, to ask the question that mattered.</p>
+<p>If the furnace does not take its price from the one who feeds it — then who pays?</p>
+<hr class="scene-break" />
+<p>He would have an answer before the morning was over. The world was generous that way.</p>
+<p>The screaming had drawn the rats.</p>
+<p>Not rats as his first world made them. Slagford sat on the lip of soul-beast country, and even its vermin had a touch of the wild in them — <strong>ash-rats</strong>, grey and quick and the size of cats, with a hard coppery sheen to their fur where the spirit power had soaked into the line over uncounted generations. They denned in the slag-heaps and they fed on the town's leavings and they were, individually, a nuisance and not a danger. The crystal's not-quite-sound had flushed a dozen of them out of the heaps in a panic, and they boiled across the cold yard in a grey wave, and one of them — wounded, maybe, or simply stupid with fear — ran straight across the toes of Lu Yan's bare frostbitten foot.</p>
+<p>His hand moved before his thought did.</p>
+<p>Not the maul. The maul was for armies; the part of him the crystal had woken knew the difference already, knew it the way you know how to close your hand. He simply <em>reached</em>, with something that was not his arm, and caught the ash-rat against the frozen rock with a flat of crimson light, and pinned it.</p>
+<p>It shrilled. It thrashed. Its small wild life beat against his grip like a moth against a lamp.</p>
+<p>And the brazier behind him <em>opened.</em></p>
+<p>He felt the channels run. He felt the worn smooth grooves around the crucible's rim find their purpose, felt them reach out along the line of crimson light into the pinned and struggling animal, and felt them begin, gently, the way water finds the lowest path, to <em>drink.</em></p>
+<p>It did not hurt the rat at first. That was the part he would remember. There was no violence in it, no tearing — the way there is no violence in a candle going out. The ash-rat's struggling slowed. Its coppery sheen dulled. The frantic heat of its small life thinned and ran backward along the crimson channel, into the crucible, into <em>him</em>, and where it went he felt — for the first time since he had taken the maul, the first time, perhaps, since the sodium light — he felt <em>warm.</em></p>
+<p>Not metaphorically. The cold that had lived in his bones for six frontier winters receded a finger's width. The hollow under his breastbone, the missing place he had carried between two worlds, filled — only slightly, only for a moment, but it filled. The rat's life was small and it did not fill him for long. But it filled him, and it was the most that empty place had ever held, and the part of Lu Yan that did the arithmetic noted, with cold precision, that he wanted more.</p>
+<p>The rat died. It did not take long.</p>
+<p>He let the crimson light go and the small grey body dropped to the rock, weightless, emptied, its eyes gone to dull beads. And in the half-circle of frozen ground where it had fallen, where the channels of his crucible had reached — the frost did not just steam away. The thin brown autumn grass that had pushed up between the slag, the hardy frontier grass that survived the cold and the soot and everything else Slagford could do to it, the grass that was the toughest living thing in that whole hard yard —</p>
+<p>— it browned, and curled, and died.</p>
+<p>A perfect circle of it, an arm's length across, gone grey and brittle as if a year of drought had been poured into it in a single breath. The life he had taken from the rat had not all reached him. Some of it the crucible had spent simply <em>opening</em> — and the cost of opening it had been paid, not by Lu Yan, who felt only warmth, but by everything small and living close enough to reach.</p>
+<p>He crouched there in the screaming red morning, six years old, a dead rat in front of him and a ring of dead grass around him and a furnace turning at his back, and he looked at the circle of brown for a long, long time.</p>
+<p>The price had not vanished.</p>
+<p>It had moved.</p>
+<p><em>Who pays,</em> he had failed to ask. Here was the answer, written in dead grass: <em>not you. Never you. That is the whole horror of it. The world pays. Whatever is nearest and weakest and cannot stop you — that pays.</em></p>
+<p>A different man, a whole man, might have recoiled. Might have felt the cold weight of it settle into his chest and stay there, the first stone in a wall he would spend the rest of his life either building or tearing down.</p>
+<p>Lu Yan felt the warmth in the hollow under his breastbone, already fading, already leaving him colder than before by exactly the amount it had given — the furnace's true accounting, he would learn, was never in his favor, only in his <em>comfort</em> — and he understood the shape of the rest of his life in that one clear cold instant, the way he had understood the world from his crib.</p>
+<p>He could climb this ladder higher and faster than anyone alive, because he had been handed the one martial soul whose price he did not have to pay.</p>
+<p>And every rung would be paid for by someone else.</p>
+<p>He stood up. He brushed the frost from his knees with a child's small hands. He looked, once, at the dead circle of grass — filing it, the way he filed everything, in the cold cabinet of his mind under a heading he would not let himself read again for years: <em>Cost. Displaced. Real.</em></p>
+<p>Then he turned to face the town that was staring at him as if he were a fire that had learned to walk, and he made the first ruthless decision of his second life, which was to let them keep being afraid, because a frightened town was a town that left an orphan alone.</p>
+<p>The examiner's voice, when it finally came, was not steady.</p>
+<p>"Boy," the thin clerk said. "Boy — what — what <em>is</em> that?"</p>
+<p>Lu Yan let the maul dissolve. He let the brazier fade back into the red place inside him where it lived. He let his eyes, which had gone the banked-ember color of the crucible's heart, cool back to plain frontier brown. And he gave the examiner the answer he had already decided to give, in the flat voice of a child who has learned that the wrong word in a place like Slagford could get you sold.</p>
+<p>"I don't know," Lu Yan said. "The crystal did it. I didn't do anything."</p>
+<p>It was the first lie of his new life. It was a good one. He watched it work — watched the clerk <em>want</em> to believe it, watched fear go looking for a story it could live with — and he understood that lying, too, would be easy, because nothing in him flinched from it, and the part of him that had once been a mild man on a train filed that away with all the rest.</p>
+<p>The examiner wrote for a long time that morning. That night, after the children were sent in and the yard was empty and the dead grass had begun, already, to be covered by the first true snow, the clerk wrote a second time — a shorter letter, sealed twice, addressed not to the prefecture but east of it, much further east, to a white tower in a city Lu Yan had only read about, where an institution that bought healers and made gods kept careful records of every anomaly the wide world coughed up.</p>
+<p><em>Western frontier,</em> the letter said, in part. <em>Slagford. Anomalous awakening. Unclassifiable martial soul, presenting tool- and beast-traits both. Spirit color: red. Repeat: red, at awakening, in a six-year-old. Recommend observation. Recommend caution. Recommend, if the subject proves what the color suggests, that he be acquired before he understands what he is — or removed before anyone else does.</em></p>
+<p>The letter went east on the next caravan, into the snow, toward the white tower.</p>
+<p>In the tallhouse loft, in the dark, Lu Yan lay among the breathing of the other children and did not sleep. He was warm — still warm, faintly, from the rat — and the warmth was a lie and he knew it was a lie and he held onto it anyway, the way a cold man holds onto any fire, and he stared up into the dark and began, methodically, the way he did everything, to plan.</p>
+<p>He had a whole ladder to climb. He had a furnace that would carry him up it. And he had, at last, an answer to the worry he had carried since the crib — the worry that something in him was already missing.</p>
+<p>Something <em>was</em> missing. It had been missing since before he could name it. But for the first time in two lives, Lu Yan had found a power that did not need him to be whole.</p>
+<p>It only needed him to be willing.</p>
+<p>He found, examining it in the dark with his usual thoroughness, that he was.</p>
+<p>That, more than the red crystal or the dead grass or the letter going east through the snow, was the thing that should have frightened the world.</p>
+<p>It would. In time.</p>
+<p>But the frontier is patient, and the snow falls early in the west, and on the first night of the rest of his long and terrible climb, the only one awake to be afraid was a six-year-old boy who felt nothing at all, and planned.</p></div>
+  <nav class="ch-nav"><a href="#top">← Contents</a><a class=" js-top" href="#top">↑ Contents</a><a href="#ch2">Next →</a></nav>
+</section>
+
+
+<section class="chapter" id="ch2">
+  <header class="ch-head">
+    <p class="ch-counter">Chapter 2 of 5</p>
+    <h2 class="ch-title">Chapter 2 — Slag and Cinder</h2>
+    <p class="ch-meta">Lu Yan, age 6 · Spirit Apprentice (rank 11, concealed) · 0 rings · POV: Lu Yan · Slagford</p>
+  </header>
+  <div class="ch-body"><hr class="scene-break" />
+<p>Power, Lu Yan decided that winter, was a forge, and like a forge it was useless without three things: fuel, a vessel to hold the heat, and a smith who knew what he intended to make. He had the fuel — the whole world was fuel, that was the horror and the gift of the crucible. He had the vessel, growing slowly, one ungovernable child's year at a time. What he did not have, and went looking for with the patience of a man who has already died once and learned that nothing is owed to anyone, was the smith.</p>
+<p>He found him at the bottom of Slagford, which was where Slagford kept the things it had used up.</p>
+<hr class="scene-break" />
+<p>The forge sat below the slag-heaps, where the town's runoff went and its broken things went and, by long unspoken agreement, its broken people went too. It was a low building of soot-black stone with a chimney that had not drawn properly in a decade, and it belonged to a man the town called Old Cinder, though that was not his name, and treated with the particular contempt reserved for people who were once something and now were not.</p>
+<p>Lu Yan had a use for a man like that. Used-up people, he had observed in two lives, told the truth more often than whole ones. They had nothing left to protect.</p>
+<p>He went down to the forge on the third morning after his awakening, while the snow held off and the town still flinched when he passed, and he stood in the doorway and watched the old man work until the old man got tired of being watched.</p>
+<p>Old Cinder was big the way a fallen wall is big — a ruin of what had clearly once been an enormous frame, now bent and listing, the left side of him dragging when he moved as if the strings on that half had been cut. One eye was milky. The hand on the dead side curled permanently half-shut, and he did everything one-handed and furious, hammering a cart-axle straight with a precision that did not match the slovenliness of the rest of him. He did not look up.</p>
+<p>"Charity cot's at the tallhouse, boy," he said. "Not down here. Down here you sweep or you bleed."</p>
+<p>"I'll sweep," Lu Yan said.</p>
+<p>The hammer paused. The milky eye and the good one both came up and looked at him, and something moved behind the good one — recognition, of a kind. The whole town had heard about the red crystal by now. Frontier news traveled on fear, and fear was fast.</p>
+<p>"You're the furnace child," Old Cinder said.</p>
+<p>"I'm the boy who'll sweep your floor for a place by your fire," Lu Yan said. "What I am besides that is my business."</p>
+<p>The old man looked at him a while longer. Then, unexpectedly, he barked a single laugh — a rusty sound, like a hinge that had forgotten the motion — and jerked his chin at the broom in the corner, and went back to his axle, and that was the whole of the negotiation. Lu Yan swept. He was good at it; he was good at anything that was mostly patience. And while he swept he watched the old man's one good hand, and the fire, and the iron, and he began the long slow work of learning a thing his crucible had given him an appetite for and no instruction in.</p>
+<p>Because that was the discovery of his first winter, and it surprised even him.</p>
+<p>The Crimson Crucible was not only a mouth. He had understood, that first red morning, that it could take — could drink a life and turn it to warmth, could open its channels and let the world pay the cost. He had assumed, in the cold arithmetic of his planning, that taking was all it did. A furnace that ate. A ladder that climbed on other people's lives.</p>
+<p>He had been wrong, and the wrongness was the first interesting thing that had happened to him in either life.</p>
+<p>The crucible could <em>make.</em></p>
+<p>He felt it the first time he watched Old Cinder ruin a weld — the old man's dead hand slipping, the heat held a half-breath too long, the iron going from orange to white to a spitting, crumbling grey at the join. Waste. A flaw. And something in Lu Yan, the same something that had reached out and pinned the rat, <em>itched</em> at it — itched the way a word on the tip of the tongue itches — because he could feel, standing six feet away with a broom in his hands, exactly where the heat had gone wrong and exactly how the crucible inside him would have held it. Not hotter. <em>Cleaner.</em> The furnace at his back did not merely burn. It <em>refined.</em> It took the flawed and the mixed and the wasted and it knew, the way it knew how to drink, how to drive the flaw out and leave the metal true.</p>
+<p>He did not tell the old man this. He filed it, the way he filed everything, and he swept, and he watched, and he learned the human craft from the outside while the inhuman one waited in him like a held breath. He was patient. He had decided, in the crib, that patience was the only thing his strange flat soul was truly built for, and he was determined to make it a weapon.</p>
+<p>"You watch the iron like you want to eat it," Old Cinder said one evening, a month in, not turning around.</p>
+<p>"I want to understand it," Lu Yan said.</p>
+<p>"Same thing, with some men." The old man set down his hammer. The good eye found him across the red light of the banked forge, and for once there was no contempt in it, only a tired and terrible kind of knowing. "I had a soul once, furnace child. Did they tell you? Down here they tell everyone, it's the only story I'm good for now."</p>
+<p>"They told me you were a soldier."</p>
+<p>"They told you I was a soldier." Old Cinder lifted his ruined left hand, the curled fingers, the dead side of his face. "A soldier is what's left when the soul master loses. I had a hammer-soul. A good one — a war-hammer, a real one, not a smith's toy. Rank fifty-three, in my day. A Spirit King." He said the title the way other men said the names of the dead. "I marched east in the border war and I met a man with a soul stronger than mine, and he didn't kill me, which I have hated him for every day since, because killing me would have been a kindness. He <em>broke</em> it. Broke the bond. You can do that, to a soul, if you're strong enough and cruel enough and you want the other man to live with it." He flexed the dead hand; it did not move. "Now I've got a broom-boy's idea of a soul. A coal that won't catch. I can feel my hammer in here some nights, furnace child, the way you feel a leg they've cut off. And I can't lift it. That's the war. That's all the war ever is, when you get under the flags. One man takes a thing from another man that can't ever be given back."</p>
+<p>Lu Yan was quiet for a moment. Not from feeling — he searched himself and found, as always, the cool flat nothing where the feeling should be — but because the old man had just handed him something more valuable than sympathy, which was <em>information</em>, and he had learned that the way to keep information flowing was to let a man think his pain had landed somewhere soft.</p>
+<p>"Does it still hurt," he asked. "The hammer you can't lift."</p>
+<p>"Every day," Old Cinder said. "That's how you know it was real."</p>
+<p>Lu Yan filed it. <em>A soul can be broken by another's will, not only killed. Note: the bond is the vulnerability. Note: cruelty as policy — leave the enemy alive and ruined. The Tallyman? Spirit Hall?</em> And beneath the cold cabinet of his planning, quieter, in the place he did not look: <em>the old man's pain is how he knows the hammer was real. The dead grass is how I'll know the same.</em> He did not let himself finish the thought. He had years of not finishing it ahead of him.</p>
+<p>"Teach me the forge," he said instead. "The real way. Not the broom."</p>
+<p>"Why," said Old Cinder. "So you can fix axles in the bottom of the world?"</p>
+<p>"So that when I leave this place," Lu Yan said, "I'll know how a thing is made before I decide whether to make it or break it."</p>
+<p>The old man looked at him for a long, long moment in the red dark. Whatever he saw — and he had been a Spirit King once, and a Spirit King who has lost everything sees clearly, having nothing left to fool himself for — he did not name it. He only nodded, slowly, the way a man nods at weather he can't change.</p>
+<p>"You're a cold little thing, furnace child," he said. "Coldest I've met, and I've met the man who broke my soul." He picked the hammer back up, and turned to the fire, and the good eye glinted. "Good. Cold iron takes the truest edge. Pick up the small hammer. Mind your hand. The forge doesn't care that you're six, and neither, I am beginning to suspect, do you."</p>
+<hr class="scene-break" />
+<p>The girl was a different problem, and Lu Yan circled her for the whole of that winter the way he circled everything he did not yet understand: slowly, from a distance, taking notes.</p>
+<p>Mei Sang did not fear him.</p>
+<p>This was so anomalous that he assumed at first he had misread it. The whole town feared him — a soft, useful fear, the kind that left him room, the kind he was carefully cultivating by being unfailingly quiet and unfailingly strange. The other orphans had stopped sharing his corner of the loft. Even Ke Lang, who feared nothing he could hit, had taken to watching Lu Yan with a wariness that was its own kind of respect. Fear was the medium Lu Yan had decided to swim in. It was clean. It asked nothing of him he did not have.</p>
+<p>Mei Sang was not afraid of him, and she would not stop talking to him, and she kept <em>giving him things.</em></p>
+<p>A heel of bread, once, when his portion had been short. A strip of rag for the burn-scar he took on his left forearm the first time the forge taught him a lesson about held heat. A place by her on the loft's one warm beam, scooting over without being asked, as if it were nothing, as if he were a person and not a furnace that had learned to walk. She had a healer's soul and a healer's instinct, the prefecture clerk had written <em>modest</em> in his book and the clerk was a fool, because the thing Mei Sang did was not modest at all. She looked at broken things and wanted to mend them. She looked at <em>him</em> — at the cold flat strange wrongness of him that he had spent two lives learning to hide and had stopped bothering to hide out here at the end of the world — and instead of recoiling she had simply, quietly, decided he was broken, and that broken things were hers to tend.</p>
+<p>"You don't have to do that," he told her, the third or fourth time she gave him something. The bread, that time. He had not asked for it. He never asked for anything; asking was a debt.</p>
+<p>"I know," Mei Sang said.</p>
+<p>"Then why."</p>
+<p>She looked at him with the green-flecked eyes that her soul had colored, and she thought about it seriously, the way she thought about everything, and she said: "When the sparrow died, you watched me cry and you didn't feel anything. I saw you not feel it. Everybody else looked away because it made them sad. You looked <em>at</em> me because it was interesting." She said it without accusation, the way you'd report the weather. "I figured anybody who can't feel things should at least have somebody around who can, so they remember what it's supposed to look like. Otherwise you'll forget there's a shape to it. And then you'll be like the Tallyman's men." She handed him the bread, final, as if the matter were closed. "Eat. You're growing. Cold things need more fuel."</p>
+<p>Lu Yan took the bread.</p>
+<p>He told himself it was efficient to take it. He told himself that a person who insisted on giving him things was an asset, that her healing soul would be useful, that the bond she was building was a leash she was putting on herself and a fool gives away leashes. He told himself all of it, fluently, in the cold cabinet of his mind, and all of it was true, and none of it was why he took the bread, and the gap between the reason he gave himself and the reason that actually moved his hand was the first crack in the flat grey wall of him that he had ever noticed from the inside.</p>
+<p>He did not look at the crack. He had years of not looking at it ahead of him.</p>
+<p>But he noted, with his usual thoroughness, that Mei Sang had said the Tallyman's men as if they were a known and present danger, and that her clear eyes had gone, for just a moment, to the east road when she said it.</p>
+<p>"Who is the Tallyman," he said.</p>
+<p>Mei Sang's whole small body did the thing he had watched it do over the dead sparrow — folded, briefly, around something heavier than she was. Then she straightened, because she was tough, because everything out here was tough or dead.</p>
+<p>"You'll find out in the spring," she said. "When the tithe comes due. Everybody finds out then." She pulled her knees up under her chin and looked at the east road, and her voice when it came again was very quiet and very flat, the flattest he had ever heard it, almost as flat as his own.</p>
+<p>"He counts," she said. "That's all he does. He counts what the frontier's worth and he takes the difference. Money, when there's money. Beasts, when there's beasts. And every spring, children." She did not look away from the road. "Awakened ones. The strong ones. He has a soul that lets him <em>know</em> — lets him look at a child and read what they'll be worth, like reading a tally-stick. And he takes the ones that read high, and he sells them east, to the white tower, and nobody ever sees them again, and the prefecture lets him because the prefecture gets a cut and the white tower gets its soul masters and the only ones who lose are us, who are too far west to matter." She finally looked at Lu Yan, and there was something in her face that was almost an apology, almost a warning, exactly a fear — but not a fear for herself.</p>
+<p>"Your crystal went red, Lu Yan," Mei Sang said softly. "The whole town saw it. The whole town's been afraid of you for a season. But fear's slow, out here. The Tallyman's not." She wrapped her arms tighter around her knees. "When he comes in the spring and reads you — and he'll read you, he reads everyone — what do you think a tally-stick says, about a six-year-old whose crystal went <em>red?</em>"</p>
+<p>Lu Yan sat very still in the cold loft with the heel of bread in his hand, and for the second time in his second life, he did the arithmetic, and felt the whole shape of an answer arrive.</p>
+<p>Somewhere east, a letter was already traveling toward a white tower, carrying his description in a clerk's careful hand. <em>Acquire him before he understands what he is,</em> the letter said, though Lu Yan did not yet know its exact words — <em>or remove him.</em> And here, west, closer, faster, a man with a counting soul was going to walk into Slagford in the spring and look at him and read, on whatever tally-stick the world kept, a number large enough to be worth a great deal of money to a great many dangerous people.</p>
+<p>He had planned for the long climb. He had planned for years of patience, of concealment, of taking the ladder one careful rung at a time while his body grew up around the furnace at his core.</p>
+<p>He had not planned for the spring to be a deadline.</p>
+<p>The arithmetic finished. It gave him an answer he did not love and could not argue with, the way his arithmetic always did, and he set the bread down half-eaten — the first time in two lives he had ever left food uneaten, and Mei Sang noticed, and her eyes widened a fraction — and he looked out at the east road and the west wildlands both, and he understood that the patient plan was dead, and a faster, harder, far more dangerous plan would have to be born to replace it before the snow melted.</p>
+<p>To be worth too much to the Tallyman was to be cargo.</p>
+<p>To be worth nothing to him was to be invisible.</p>
+<p>And to be worth <em>more than he could carry</em> — to be a thing the Tallyman's counting soul looked at and read not as profit but as <em>threat</em>, as a number so large and so red that the only safe move was to leave it alone or die trying to take it —</p>
+<p>— that was a thing a furnace child could become, before the spring, if the furnace child was willing to go west into the Ashwood and pay the kind of price the crucible charged.</p>
+<p>Which was to say: if he was willing to let something else pay it.</p>
+<p>"Mei Sang," Lu Yan said, in the cold dark, in his flat quiet voice. "Where does the caravan road meet the Ashwood. The old way, the one nobody uses."</p>
+<p>She turned to look at him, and whatever she saw in his banked-ember stillness made the breath catch in her throat — not fear of him, never quite that, but fear <em>for</em> him, and something underneath the fear that he did not have a name for and would not learn the name of for years.</p>
+<p>"Lu Yan," she said. "The Ashwood kills grown soul masters. You're <em>six.</em>"</p>
+<p>"I know how old I am," Lu Yan said. "Where does the road meet the wood."</p>
+<p>And Mei Sang, who could not stop tending broken things even when the broken thing was walking knowingly toward the dark — Mei Sang looked at him for a long, long moment in the red glow of the distant forge, and then she told him, because she had decided long ago that the alternative to going with him into the things he could not feel was leaving him to face them alone, and she would not do that, not for the coldest boy on the frontier, not for anyone.</p>
+<p>"I'll show you," she said. "But I'm coming. You'll need somebody who can feel it when you're about to die, since clearly you won't feel it yourself."</p>
+<p>It was, Lu Yan reflected, an extremely inefficient arrangement.</p>
+<p>He agreed to it anyway, and did not look too closely at why, and added the not-looking to the growing list of things in himself he had decided to leave for later.</p>
+<p>Outside, the first true thaw-wind of the year came down off the western wildlands, and somewhere under the snow, the dead circle of grass in the tallhouse yard waited for a spring it would not, this year, be part of.</p></div>
+  <nav class="ch-nav"><a href="#ch1">← Previous</a><a class=" js-top" href="#top">↑ Contents</a><a href="#ch3">Next →</a></nav>
+</section>
+
+
+<section class="chapter" id="ch3">
+  <header class="ch-head">
+    <p class="ch-counter">Chapter 3 of 5</p>
+    <h2 class="ch-title">Chapter 3 — What the Strong Owe</h2>
+    <p class="ch-meta">Lu Yan, age 6 · Spirit Apprentice (rank 12, concealed) · 0 rings · POV: Lu Yan · Slagford</p>
+  </header>
+  <div class="ch-body"><hr class="scene-break" />
+<p>He needed two things before the Ashwood, and the Ashwood would give him neither. He needed strength his six-year-old body did not yet have, and he needed people, because he had read enough of both his worlds' stories to know that the man who walks into the dark alone is the man whose name becomes a warning.</p>
+<p>The strength he could not buy or wait for. So he did the only thing the crucible allowed: he fed it, quietly, all winter, in the bottom of Old Cinder's forge where no one looked and the dead grass could be blamed on the cold.</p>
+<p>It was slow and it was ugly and it taught him more about his soul than any book in either life. The ash-rats were easy — the slag-heaps were full of them, and a rat's life was a thimble of warmth and a hand's breadth of dead ground. He learned the arithmetic of it precisely, because precision was the only mercy he had to offer anything. A rat: a thimble. A slag-cat, the lean copper-sheened predators that hunted the rats: a cup, and a circle of dead moss the size of a cartwheel. He learned that the cost scaled not with what he <em>gained</em> but with what he <em>spent reaching</em> — that a clean, willing, dying thing cost almost nothing to drink, and a strong, frightened, fighting thing cost the world around it dearly, because the crucible had to force the channels open against a life that did not want to let go, and the forcing was paid for in whatever was nearest.</p>
+<p><em>The willing cost little. The unwilling cost much, and never to me.</em> He filed it. It was, he understood even then, the most important sentence in his life, and he would spend that life pretending he had not understood it at six.</p>
+<p>By the thaw his concealed rank had climbed from the 10 he had awakened with to past 12 — a season's gain that should have taken a gifted child a year, that would have taken an ordinary one three. Old Cinder, who had been a Spirit King and could feel the shape of spirit power the way a blind man feels a room, watched him grow and said nothing, until one night he said one thing.</p>
+<p>"Whatever you're burning down there," the old man said, not looking up from his anvil, "the moss don't grow back where you do it. I've been smithing in this hole forty years. I know every weed in it." He set the hammer down. "I'm not asking what it is. I lost the right to judge a man's furnace when I marched east. I'm telling you the moss remembers. Things remember, furnace child. Build high enough on what doesn't grow back, and one day you'll want to stand somewhere green, and there won't be anywhere left."</p>
+<p>Lu Yan swept the same patch of floor he always swept. "Is that what happened to you?"</p>
+<p>"No," Old Cinder said. "What happened to me is I built on nothing at all, and a man with a stronger furnace knocked it down. You've got the opposite problem. You'll never be knocked down. That's worse. A man who can't be knocked down never learns where the ground is." He looked at Lu Yan with the one good eye, milky and clear at once. "Get out of my forge, boy. Go find your second thing. The strength you can steal. The people you'll have to <em>earn</em>, and earning's a muscle you haven't got."</p>
+<p>He was right about that, as it happened. Earning was the one muscle the crucible could not feed.</p>
+<hr class="scene-break" />
+<p>Ke Lang was easy to find and hard to use, which made him a perfect place to start.</p>
+<p>The older boy held court in the lee of the granary where the tithe-grain was kept, a warm wall and a defensible corner, and he held it the way the strong always held things on the frontier: by hurting whoever wanted it more than they could bear hurting. He had his boar-soul and three winters and forty pounds on Lu Yan, and a court of four smaller, hungrier orphans who ate his cruelty because cruelty with a warm wall behind it was better than kindness in the cold.</p>
+<p>Lu Yan walked up to the warm wall in the grey thaw-light and stood in the open where Ke Lang could see him, and waited to be noticed, which did not take long.</p>
+<p>"Furnace child wants the wall," Ke Lang said, and grinned, and his court grinned with him because that was their function. "Red crystal. Big spooky red crystal." He rolled to his feet and let the boar-bristles come up his forearms, coarse and grey and genuinely dangerous — a beast-soul at rank thirteen or so, more than enough to break a smaller child's bones, which was the whole of his ambition. "Show us a trick, furnace child. Go on. Make the scary light. Or are you only scary to clerks?"</p>
+<p>It would have been very easy to kill him.</p>
+<p>Lu Yan noted this with the flat clarity that passed in him for emotion. He could feel the war-trance lying under his skin, the cold stillness that would arrive the instant he reached for it, and behind it the maul and the brazier and the channels that drank. He could see, laid out in front of him with the cut-glass exactness the trance gave, the four moves it would take and the one circle of dead ground it would leave. Ke Lang's life was a beast-soul's life. It would be more than a cup. It would, the arithmetic said, be most of a level.</p>
+<p>He filed the calculation and discarded the action, because Old Cinder was right about the muscle he hadn't got, and a corpse could not be earned.</p>
+<p>"No trick," Lu Yan said. "I don't want the wall. I want you."</p>
+<p>The court laughed. Ke Lang did not, quite, because some animal part of him had heard the flatness in it.</p>
+<p>"For what," Ke Lang said.</p>
+<p>"I'm going into the Ashwood before the tithe," Lu Yan said, in the open, plainly, because he had decided that the truth, used like a tool, cut deeper than any lie. "To take a spirit ring. I'll be a soul master before the Tallyman comes. And when the Tallyman comes, every awakened child in this town reads as cargo on his counting-stick, including you, Ke Lang. Boar-soul, rank thirteen, frontier-strong. He'll read you as a soldier worth selling. You'll go east in a cart and you'll never see this wall again."</p>
+<p>The grin had gone off Ke Lang's face. The court had gone quiet. Out here, <em>the Tallyman</em> was not a word you joked over.</p>
+<p>"I can't stop him reading you," Lu Yan went on. "But a soul master who comes back from the Ashwood with a ring reads <em>higher</em> than a boar-soul boy. High enough to be dangerous to handle. High enough that a careful man counts the cost of taking him and decides to take the cheaper cargo instead." He let it land. "You can't get a ring, Ke Lang. You'd die in the wood and you know it. I can. I'm offering you a place behind the one person in Slagford the Tallyman might decide isn't worth the trouble. That's the trade. Your strength, your fists, your back — for the only thing I have that's worth anything, which is that men are going to be afraid of me, and fear casts a shadow, and you can stand in it."</p>
+<p>It was, Lu Yan would reflect later, an almost entirely honest pitch, and that was why it worked. He had offered the boy no love and no lie. He had offered him <em>shelter from a real fear</em>, in exchange for <em>use</em>, in language a frontier child understood in his bones, and he had done it in front of the boy's court so that refusing would cost Ke Lang the only thing he valued, which was the appearance of strength.</p>
+<p>Ke Lang stood at his warm wall with his court watching and his world rearranging itself, and Lu Yan watched the arithmetic happen behind the older boy's eyes — slower than his own, but the same arithmetic, the frontier's arithmetic, the only kind that ever mattered out here.</p>
+<p>"You come back from the Ashwood with a ring," Ke Lang said slowly, "and I'm yours. Fists and back. Till the tithe's past."</p>
+<p>"Till I say otherwise," Lu Yan said. "I don't buy a man for a season. Buy you once, keep you. That's the trade or there's no trade."</p>
+<p>The bigger boy's jaw worked. His court held its breath. And then something moved in Ke Lang's face that Lu Yan filed away as more valuable than the strength or the fists — <em>relief</em>. The relief of a frightened animal that has found something stronger than itself to stand behind. Ke Lang had been holding a warm wall against the whole cold world with nothing but his own bristles, and he was tired, and he had just been offered a bigger wall.</p>
+<p>"Yours," Ke Lang said. "Till you say otherwise." And he spat in his palm and held it out, the frontier's oldest contract, and Lu Yan looked at the offered hand for a moment, and then took it, and felt — distantly, faintly, in the place where the rat's warmth had briefly lived — the smallest possible flicker of something the crucible had no channel for.</p>
+<p>Behind him, where the trade was struck, on the granary wall, the thin spring moss did not die.</p>
+<p>He noticed that. He noticed it the way he noticed everything, and he did not understand it, and he filed it in the cold cabinet under a heading he could not yet read: <em>Earned things cost nothing. Note. Important. Why.</em></p>
+<p>He would spend years not finishing that thought either.</p>
+<hr class="scene-break" />
+<p>There were five of them in the end, which was four more than Lu Yan had planned and exactly as many as Mei Sang insisted on.</p>
+<p>Ke Lang, for his fists and his fear. Mei Sang, for her healing and her stubbornness and the thing she did to the air around him that he refused to examine. Two of Ke Lang's court — a lanky boy named Dou and a quick small girl named Pip, both awakened, both weak, both terrified of being left behind to read as cargo. And Lu Yan, who was the furnace they would all, knowingly or not, be standing close enough to feed.</p>
+<p>Old Cinder caught him at the forge door on the last grey morning before they left, and pressed something into his hands, heavy and cold and wrapped in oilcloth. Lu Yan unwrapped it. A hand-axe — a real one, frontier iron, the head re-forged and the edge honed to a line of light. Plain. Perfect. The old man's one good hand had made it true.</p>
+<p>"You go in with a maul of slag you can't lift more than once a day," Old Cinder said gruffly, "and you'll learn the hard way that a soul skill's a hammer and a hammer's no good when you need a knife. Take the axe. Real iron doesn't tire. Real iron doesn't cost you anything you can't see." The good eye held his. "And furnace child — listen. The wood's full of cheap rings. Ten-year beasts, fifty-year beasts, white rings, yellow rings, easy and weak and they'll never throw you off. Every elder in the Empire will tell you to take the cheap ring at six. Match the ring to the rank, they'll say. Don't overreach. Live long."</p>
+<p>"And you," Lu Yan said.</p>
+<p>"And I marched east at fifty-three and lost everything to a man who <em>had</em> overreached, who'd taken rings he had no business taking and lived, and stood over me afterward, and I have hated that advice my whole broken life." The old man's grip tightened on Lu Yan's small shoulder, hard enough to bruise, the dead hand twitching at his side as if it too wanted to hold on. "Don't take the cheap ring. Not you. A boy with a red crystal who takes a white ring is a coward burying his own crystal. Go deep. Find the thing in that wood that's old enough and mean enough to <em>kill</em> you, and kill it instead, and take its ring even if it nearly takes your arm — because the ring you take at six is the floor you build the rest of your life on, and a floor of cheap stone holds up a cheap house." He let go. He stepped back. He looked, suddenly, very old and very tired and faintly, terribly proud, which was the worst of the three. "You'll do it anyway. I can see you'll do it anyway. I just wanted to be the one who told you to, so that when it nearly kills you, you'll remember a man believed you could pay the price and live."</p>
+<p>Lu Yan looked down at the axe, and up at the broken Spirit King who had just handed him both a tool and a doctrine, and he understood that he had been given something he had not earned and could not file — a thing offered freely, the way Mei Sang offered bread, that cost the giver and grew the moss instead of killing it.</p>
+<p>"I'll bring the axe back," Lu Yan said. It was the closest thing to <em>thank you</em> his flat grey soul could manufacture, and Old Cinder, who had lost everything and learned to read men in the losing, heard it for what it was, and nodded, and turned back to his cold forge so the children would not see his face.</p>
+<p>They went west on the old way, the road nobody used, into the grey morning and the waiting dark of the Ashwood, five children and a furnace, while behind them in Slagford the snow finished melting off a dead circle of grass in the tallhouse yard, and east of everything, in a white tower, a clerk's sealed letter was opened, and read, and set upon a desk where careful, dangerous men decided what the frontier was worth.</p></div>
+  <nav class="ch-nav"><a href="#ch2">← Previous</a><a class=" js-top" href="#top">↑ Contents</a><a href="#ch4">Next →</a></nav>
+</section>
+
+
+<section class="chapter" id="ch4">
+  <header class="ch-head">
+    <p class="ch-counter">Chapter 4 of 5</p>
+    <h2 class="ch-title">Chapter 4 — The Ashwood</h2>
+    <p class="ch-meta">Lu Yan, age 6 · Spirit Apprentice (rank 13, concealed) · 0 rings · POV: Lu Yan · The Ashwood, western wildlands</p>
+  </header>
+  <div class="ch-body"><hr class="scene-break" />
+<p>The Ashwood was not named for fire. It was named for what grew there — pale ash-trees with bark the grey of old bone and leaves that hung even in winter, a dim, soft, perpetual grey that swallowed the morning light a hundred paces past the tree-line and never gave it back. The frost did not reach the forest floor. The forest floor reached up instead: a deep, dry, whispering carpet of fallen grey leaves that had not rotted because nothing here was in a hurry, that took a footstep and held it and let it go again with a sound like a long slow exhale.</p>
+<p>It was beautiful, in the way that the inside of a mouth is beautiful before it closes.</p>
+<p>Lu Yan walked point because the trance let him, and the others walked in the cone of his stillness whether they understood it or not. He had learned that too, this winter, feeding the furnace in the dark — that the war-trance was not only for the moment of killing. He could hold it low and banked, a candle instead of a forge, and in that low cold state the wood arranged itself for him: the wrong silences, the places where the leaf-carpet had been disturbed and re-settled, the faint sour-musk seam of a game trail, the slow change in the air's weight that meant the ground was about to fall away toward water. He read the Ashwood the way Old Cinder read iron. He had walked into it expecting to be prey. He found, two hundred paces past the tree-line, that some cold instinct older than either of his lives had already started teaching him to hunt.</p>
+<p>"It's watching us," Mei Sang said quietly, an hour in. She walked at his left shoulder with her healer's soul half-summoned, a faint green mist clinging to her hands, useless as a weapon and worth more than any weapon, because she could feel the wood's mood the way he read its tracks. "Not one thing. The whole — all of it. Like a room where you've just stopped talking."</p>
+<p>"I know," Lu Yan said.</p>
+<p>"You're not afraid."</p>
+<p>"No."</p>
+<p>"I am," Mei Sang said, simply, without shame. "I'm going to be afraid the whole time, and I'm coming anyway, and I want you to remember that's a thing a person can do. Be afraid and choose anyway. In case you ever need to know what it looks like."</p>
+<p>Lu Yan filed it. He was, he had begun to notice, filing a great many things she said, in a cabinet that was getting its own quiet shelf.</p>
+<p>Behind them Ke Lang carried a frontier spear too big for him and a fear too big for the spear, and Dou and Pip walked in the middle where the middle was safest, and the grey wood breathed around all of them, and held their footsteps, and let them go.</p>
+<hr class="scene-break" />
+<p>The cheap rings announced themselves all morning, exactly as Old Cinder had promised.</p>
+<p>A white-flecked <strong>moss-hare</strong> the size of a dog, ten or twenty years old, that froze in a fern-break and watched them with too-knowing eyes — a beast-soul host with a single soul skill, a hare that could blur three steps in a heartbeat. Easy. White ring. Pip's eyes had gone wide and hungry at it: <em>that one, take that one, that one won't kill us.</em> Lu Yan walked past it, and the moss-hare, reading his stillness for what it was, did not blur away. It simply lowered itself slowly into the ferns and let the dangerous quiet thing pass, the way the small wise always let the cold pass.</p>
+<p>A <strong>bristle-sow</strong> in a wallow near the water, sixty or seventy years, yellow ring, mean and territorial and exactly the kind of kill an elder would call <em>appropriate</em> for a gifted six-year-old. Ke Lang had tensed at it, half-eager — <em>that's a boar, that's my kind, I could help with that one.</em> Lu Yan watched the sow heave up out of her wallow, read her age in the yellow cast of her tusks and the slow weight of her, and judged her <em>not enough</em>, and led his five children in a wide silent arc around her wallow while she huffed and stamped and decided, in the end, that whatever was passing through her wood was not worth the cost of meeting it.</p>
+<p>That was the lesson he had brought from the forge and it held all morning, in beast after beast: <em>the wood reads me the way I read it.</em> The cheap things, the ten-year and fifty-year and hundred-year things, looked at the small cold creature moving through their grey home with a furnace banked behind its eyes, and the wise ones got out of the way, and the foolish ones he could have killed and did not, because Old Cinder was right and he had decided to believe him: the floor he laid at six would hold up the rest of his life, and he would not build his life on cheap stone.</p>
+<p>He went deeper. The grey closed in. The leaf-carpet got older underfoot, and softer, and quieter, until even Mei Sang's frightened breathing seemed loud, and Ke Lang had stopped pretending he wasn't terrified and started just being terrified silently, which Lu Yan respected more.</p>
+<p>And in the deep heart of the Ashwood, where the ash-trees grew thick as a fist and the grey light failed to nothing and the leaf-carpet was so old and so deep that a grown man would have sunk to his knees in it, Lu Yan found the thing he had come for, and it found him at the same moment, and it was not afraid of him at all.</p>
+<hr class="scene-break" />
+<p>It had been a wolf, once, the way Old Cinder had been a wall.</p>
+<p>Now it was something the wood had been making for a very long time. Lu Yan's first sense of it was wrongness — a silence too total, a place where the wood's ambient unease simply stopped, the way sound stops at the edge of deep water. Then the smell: not musk, not rot, but a cold mineral scent, like wet stone, like the inside of a cave, like nothing that should come off a living animal. Then, last, because it had willed it last, the thing itself, rising up out of the deep grey leaf-carpet where it had lain folded and patient and perfectly still, perhaps for years.</p>
+<p>An <strong>ashen direwolf</strong>, the wood-lore would have called it, if anyone in Slagford had lived long enough in its part of the wood to name it. It stood as high at the shoulder as a frontier pony, and it was the grey of the ash-bark and the grey of the dead leaves and the grey of the failing light, so that even moving it seemed half made of the wood itself. Its eyes were the only color in the deep heart of the Ashwood — a pale, cold, lampless blue, old and patient and entirely without fear, the eyes of a thing that had been the apex of its small grey world for longer than Slagford had stood. Around its paws, where it set them down, the leaf-carpet did not exhale. It crunched, frost-rimed, because the cold came off the beast in a slow steady tide.</p>
+<p>Lu Yan read its age the way the forge had taught him to read heat, and the number the reading gave him was the number he had come for and a little more than he had bargained on, and the part of him that did arithmetic noted it with cold approval and a thin clean edge of something that was almost respect.</p>
+<p><em>Old. Five hundred years. Six. A purple ring — past purple, near the top of it.</em> Far beyond what any elder would call appropriate for a six-year-old. Far beyond what a sane child should attempt. The kind of ring a gifted soul master might hunt at twenty, with a team, with care. The kind of floor that would hold up a very tall house.</p>
+<p>The kind of thing that could, very easily, kill him.</p>
+<p>"Lu Yan." Mei Sang's voice was a thread. The green mist had gone out of her hands; her whole small body had locked, the prey-stillness, the freeze. Behind her Ke Lang had made a sound that was not a word. Dou and Pip had stopped existing as anything but two held breaths. "Lu Yan, that's — we have to go, we have to go <em>now</em>, that's not a ring, that's a —"</p>
+<p>"Take them back," Lu Yan said.</p>
+<p>He did not raise his voice. He did not look away from the lampless blue eyes. He had already begun, with the slow deliberate care of a man drawing a knife from a known drawer, to reach for the thing under his skin.</p>
+<p>"Mei Sang. Take them. Back along the seam, the way we came, walk don't run, running wakes the cheap things. Get them to the tree-line." The cold was coming up in him now, the trance, not flooding but <em>clarifying</em>, the wood and the wolf and the five children and his own pulse all arranging themselves into a single clear cut-glass picture in which there was exactly one path that ended with him alive. "If I'm not at the tree-line by full dark, I'm not coming. Don't wait. Don't come back in. Take them home."</p>
+<p>"You can't —" Mei Sang started.</p>
+<p>"I'm afraid," Lu Yan said, which was a lie, the only lie he had told her, and he told it because it was the one word that would make her move. "You said be afraid and choose anyway. I'm afraid, Mei Sang, and I'm choosing. Now you choose. Get them out."</p>
+<p>It was a cruel thing to do, using her own courage as a lever to make her leave. He knew it was cruel. He did it anyway, because nothing in him recoiled from it and four children's lives were worth one girl's hurt, and that arithmetic, too, he filed, in the shelf that was becoming her own, and did not look at.</p>
+<p>Mei Sang made a sound he would remember. Then she grabbed Pip's hand and Dou's collar and hissed at Ke Lang, and the four of them went back along the seam into the grey, walking, not running, because even terrified she was smarter than her fear — and Lu Yan was alone in the deep heart of the Ashwood with a thing five hundred years his elder, and the cold came up the rest of the way, and the world went quiet, and clear, and his.</p>
+<p>The direwolf watched the children leave and did not chase them.</p>
+<p>It had already chosen its meal. It was looking at the small cold thing that had not run.</p>
+<hr class="scene-break" />
+<p>The maul was wrong for this. Lu Yan had known it before he came; Old Cinder had known it for him. The maul was an army's weapon, a single tremendous blow that cost him a day's strength to summon and could not be aimed at something that moved like falling shadow. He left it where it lived, in the red place inside him, and he took Old Cinder's axe in his right hand, plain frontier iron honed to a line of light, real iron that did not tire and did not cost, and he let the crucible give him only the one thing it gave for free: the war-trance, and the strength to use a child's body past what a child's body should bear.</p>
+<p>The wolf came without a sound.</p>
+<p>It did not gather itself or growl or give any of the warnings a lesser beast would give. One instant it stood in the frost it made; the next it was simply <em>arriving</em>, a tide of grey and cold crossing the deep leaf-carpet faster than the eye that was not in the trance could follow — and Lu Yan, who was in the trance, who stood in the cold clear still place where the world slowed to honey, watched it come and read the line of its leap and was not where the line ended.</p>
+<p>He moved a half-step. The leaf-carpet exhaled where his foot left it. The wolf's jaws closed on the grey air his throat had occupied a quarter-heartbeat before, cold radiating off them in a wave that frost-burned the side of his face, and as it passed he set Old Cinder's axe into the long grey muscle of its shoulder with everything a six-year-old body lent past its breaking, and felt the true iron bite, and felt, distantly, the hot shock of his own small joints tearing with the force of the blow.</p>
+<p>The wolf screamed. It was the first sound it had made and it was terrible — not a howl, a high cold splitting note like the crystal had made, like ice breaking on deep water — and it twisted in the air with the axe buried in it and came down wrong and spun, and its tail, heavy as a club and rimed with frost, took Lu Yan across the chest and threw him ten feet into the bole of an ash-tree.</p>
+<p>Ribs went. He felt them go — felt the wet crack of it, the white edge of pain that in any ordinary state would have ended him as a fighter. The trance took the pain and set it aside, not gone, <em>filed</em>, a thing to deal with later if there was a later. He was already moving. He had to be already moving. He had read this part too, in the cold clear picture: a thing five hundred years old does not give you a second clean blow, so the first one has to start something the second one finishes, and he had aimed the first blow not to kill but to <em>cripple the leg</em>, and the wolf, coming around for him again, came around <em>slow</em>, dragging the shoulder he had opened.</p>
+<p>That was the whole of his plan and the whole of his chance. Cripple it, and outlast it, and let it bleed in the cold it made, and find — in the long terrible minutes of staying alive against a thing that should kill him in seconds — the single instant when five hundred years of patience finally, fatally, lapsed.</p>
+<p>He found it in the dark. He was never sure, afterward, how long it took. The trance ate time the way it ate pain. There was the wolf and the cold and the grey, and his own breath sawing wet and red, and Old Cinder's axe biting again and again into grey muscle wherever the cold clear picture showed him an opening — the other shoulder, the flank, once, gloriously, the soft place behind the foreleg where real iron found something that mattered. There was the tree-bark at his back when he ran out of room and the leaf-carpet sucking at his feet when he ran out of tree, and the slow terrible arithmetic of a child bleeding out a little slower than a wolf, each of them spending what they had, each of them counting.</p>
+<p>And at the end — when the lampless blue eyes had begun, at last, to gutter, when the frost off the beast had thinned to almost nothing, when it gathered itself one final time for a leap it no longer had the leg to make — Lu Yan did the thing he had been saving, the thing the maul was for, the thing that cost him a day's strength and that he had been holding in the red place since the children left.</p>
+<p>He summoned the maul into the wolf's last leap.</p>
+<p>Not to swing it. He had no strength left to swing anything; his arms were ruined, his ribs were a wet ruin, the axe had fallen from a hand that would not close. He summoned the great black war-maul of cooling slag directly into the air along the line of the wolf's final desperate arc, a tremendous immovable weight of soul-forged iron materializing in the one place the cold clear picture had promised the wolf would be —</p>
+<p>— and the ashen direwolf, five hundred years the apex of its grey world, came down out of its last leap with all its failing weight and broke itself against the maul like a wave against a seawall.</p>
+<p>The sound it made was not a scream this time. It was very small, and very final, and then it was nothing at all, and the deep heart of the Ashwood was silent in a new way, a way it had not been silent in five hundred years, and in that silence a six-year-old boy lay broken in the deep grey leaves beside the cooling body of the thing he had killed, and breathed, wet and slow and alive, and felt the trance begin, gently, to recede, and the pain begin, patiently, to arrive.</p>
+<p>He had perhaps a minute before the pain became the whole world. He had perhaps a minute before the body that had carried him here failed.</p>
+<p>And the wolf was dead, and the wolf was warm, and the channels of the crucible were already turning at his back, opening of their own slow hunger toward the great cooling five-hundred-year life laid out beside him in the dark —</p>
+<p>— and the ring, the spirit ring, the floor he had come to lay, had a window, and the window was closing.</p>
+<p>Lu Yan, broken in the leaves, did the last arithmetic of the longest day of his second life, and reached.</p></div>
+  <nav class="ch-nav"><a href="#ch3">← Previous</a><a class=" js-top" href="#top">↑ Contents</a><a href="#ch5">Next →</a></nav>
+</section>
+
+
+<section class="chapter" id="ch5">
+  <header class="ch-head">
+    <p class="ch-counter">Chapter 5 of 5</p>
+    <h2 class="ch-title">Chapter 5 — The Floor He Laid</h2>
+    <p class="ch-meta">Lu Yan, age 6 · Spirit Master (rank 14, concealed) · 1 ring (purple) · POV: Lu Yan · The Ashwood</p>
+  </header>
+  <div class="ch-body"><hr class="scene-break" />
+<p>There is a thing that happens when a soul master absorbs a spirit ring, and every account of it in either of Lu Yan's worlds described it as a kind of grace — a warmth, a homecoming, the dead beast's strength flowing into the living master like water finding its level, the new ring settling around the body in a band of light. Gentle. Generous. The reward at the end of the hunt.</p>
+<p>That is not what the crucible did.</p>
+<p>The wolf's spirit ring rose from its cooling body as a band of deep, royal, near-black purple — past the middle of purple, near its top, the color of a thing that had lived five hundred years and meant to live five hundred more — and it drifted toward Lu Yan the way such rings drift, slow, almost tender, ready to be <em>received</em>.</p>
+<p>The crucible did not receive it.</p>
+<p>The crucible <em>took</em> it, and it took the wolf with it, and it took, Lu Yan understood in the long white instant of the absorption, far more than the wolf.</p>
+<p>The channels opened all the way. Not the thimble's-width he used on rats in the forge-dark, not the cup's-width of a slag-cat — all the way, the full hungry mouth of the thing he carried, because a five-hundred-year life was not a thimble or a cup, it was an ocean, and the crucible meant to drink the ocean. The purple ring did not settle around him gently. It was seized, hauled in, slammed into place around his broken body like a manacle closing, and the wolf's cooling strength did not flow — it <em>poured</em>, a torrent of cold patient ancient power forced down channels far too small for it, and the forcing tore him, and the forcing healed him, both at once, ribs knitting wrong and then right under the flood, ruined joints screaming and mending, the whole broken architecture of a six-year-old body remade in the space of a single held breath into something that could hold what was being poured into it — barely, agonizingly, at a cost.</p>
+<p>And the cost went where it always went.</p>
+<p>He felt it leave him. That was the part the accounts never mentioned, because no account had ever been written by a soul master who carried what Lu Yan carried. The absorption of an ordinary ring spends a little of the beast's strength simply in the joining — a tax, paid out of the dead thing's surplus, small enough that no one notices. The crucible's joining was not small. To force the wolf's ocean down channels built for cups, to seize a near-black purple ring into a body that should not have survived it, the crucible needed to <em>open</em> itself wider than it had ever opened — and the cost of opening, the cost it never paid itself, went out of Lu Yan in a wave he could feel, a cold front of pure displaced <em>spending</em> that rolled off him into the deep heart of the Ashwood in every direction at once.</p>
+<p>He lay in the grey leaves and felt it go, and he heard the wood die.</p>
+<p>It was not loud. That was the horror that lived in him longest, longer than the broken ribs, longer than the lampless blue eyes: it was not loud at all. It was a sound like a vast slow exhale, like the leaf-carpet's small sigh under a footstep but multiplied past counting, a soft grey susurration spreading outward through the deep wood as the cost of his ring came due on everything that lived and could not stop him. The ash-trees did not fall. They simply <em>stopped</em> — the grey leaves that had hung through winter loosing all at once, a slow grey snow of them sifting down through the dark; the deep old leaf-carpet going from soft to brittle; the moss on the boles going white; the small wise things that had gotten out of his way all morning, the moss-hares and the slag-cats and the patient cold beetles in the deep loam, going still in their burrows in a widening circle with the dead wolf and the living boy at its center.</p>
+<p>Not all of it. Not the whole Ashwood — the crucible was not a god yet, and an ocean could only buy so wide a grave. But a circle. A great circle of the deep heart of the wood, three hundred paces across, perhaps four, gone grey and brittle and still in the space of a single absorption, so that when the torrent finally ebbed and the purple ring sat hard and cold and <em>his</em> around a body remade to hold it, Lu Yan pushed himself up out of the dead leaves and stood, healed, ringed, a true soul master at six years old — at the dead center of a circle of forest he had murdered to pay for it.</p>
+<p>He stood there a long time.</p>
+<p>He did the arithmetic, because the arithmetic was the only thing he had ever been able to feel with any urgency, and the arithmetic, this time, was very large, and very clear, and it said: <em>one ring. Near-black purple. The floor of a very tall house. Old Cinder was right; this floor will hold up anything. Cost: this. All of this.</em> And he made himself look at the all-of-this, the grey circle, the snow of dead leaves still sifting down through the dark, the small still shapes in the loam — made himself look, because he had decided in the tallhouse loft that the one discipline he would not allow himself to lose was the discipline of <em>seeing the bill.</em> A man who looks away from the bill, he had reasoned, is a man who will eventually convince himself there is no bill, and a man who believes there is no bill will spend without limit, and a man who spends without limit, with a furnace like this, becomes the thing the story warned about — not through madness, since the madness had been spared him, but through <em>ease</em>. Through never once being made to feel the price.</p>
+<p>So he looked. He stood at the center of the circle of his first great spending and he looked at every part of it, and he filed it, all of it, in the cold cabinet, under the heading he had written at six and would carry to the end: <em>Cost. Displaced. Real. This is what one ring weighs. Remember the weight. Whatever else you let yourself forget, furnace child — remember the weight.</em></p>
+<p>Then, because the light was failing and Mei Sang would not leave the tree-line no matter what he had told her, because he knew her now well enough to know that, he turned his back on the grey circle and went to find his people.</p>
+<p>The new soul skill came up his arm as he walked — unbidden, the way the maul had come unbidden in the cold yard, the crucible showing him what it had bought. From the deep near-black purple ring, a band of cold blue rimed his right forearm, and the leaf-litter ahead of him whitened with sudden frost where his focus fell, and he understood the shape of the gift without being told: the wolf's patience, the wolf's cold, the wolf's five-hundred-year stillness, made into a thing he could spend. <em>Hoarfrost Tread</em>, he named it, privately, for the way the frost ran out ahead of him along the ground — a soul skill of cold and patience and the slow killing stillness of the deep wood, a hunter's skill, a predator's skill, exactly suited to the thing he had paid so much to become.</p>
+<p>It was a good skill. It was a magnificent floor. He would build a magnificent house on it.</p>
+<p>He did not let himself enjoy it. He had decided that too, walking out of the grey circle: that he would never let himself <em>enjoy</em> the spending, because enjoyment was how ease became appetite. He would use the power. He would climb the ladder. He would let the world pay, because he had been handed a soul that gave him no other way to climb — but he would not, ever, let himself like it. That thin cold discipline, self-imposed, unenforced by anything in his own flat nature, was the only leash Lu Yan had, and he gripped it the way Old Cinder gripped the memory of a hammer he could no longer lift, and for the same reason: so that he would always know it was real.</p>
+<hr class="scene-break" />
+<p>Mei Sang was at the tree-line in the last grey light, exactly where he had told her not to be, with the other three huddled behind her and her healer's soul lit full and trembling, the green mist streaming off her hands into the dark as if she could push it all the way to the deep heart of the wood by wanting it badly enough.</p>
+<p>She saw him coming out of the grey — small, whole, walking, a near-black purple ring turning slow around him in the dark, frost running out ahead of his feet — and her face did something he had never seen it do. Relief and terror at once, the two of them fighting, neither winning.</p>
+<p>"You're alive," she said. And then, because she was Mei Sang, because she felt things the way he could not and had appointed herself the keeper of the shape of them: "Lu Yan, the wood — I felt it — back there, behind you, I felt all of it just — <em>stop</em>. All at once. Like a candle. A whole — a whole part of the wood, just gone out. What did — what was that, what did you —"</p>
+<p>"That was the cost," Lu Yan said.</p>
+<p>He did not lie to her. He had lied to her once, in the deep wood, to make her save the others, and he had decided that was the only lie he would spend on her, because she was the one person in two lives who looked at the flat grey wrongness of him and stayed, and a man does not lie to the only thing that stays. He stopped in front of her in the failing light, small and whole and ringed and terrible, and he told her the truth, in his flat quiet voice, because she of all people had earned it and because someone, he had decided, should know — should carry the shape of it the way she carried the shape of grief, so that if he ever forgot the weight there would be one person left in the world to remember it for him.</p>
+<p>"My soul takes life and turns it to strength," he said. "And it makes the world pay the cost of the taking, because it will not make me pay it. I killed the wolf. That was mine to do; I came to do it. But the ring cost more than the wolf, and the more, the wood paid. A circle of it. Three hundred paces, maybe four. It's dead, Mei Sang. I killed it the way I'd snuff a candle, by being what I am, and it cost me nothing — nothing — and that is the whole truth of me and I'm telling it to you because you're the only one who'll feel it the right way, and I need one person in the world to feel it the right way, because I can't."</p>
+<p>Mei Sang stared at him in the dark. The green mist guttered around her hands. Behind her Ke Lang and Dou and Pip had gone very still, hearing a thing children should not have to hear.</p>
+<p>And Mei Sang — six years old, frightened, a healer to the marrow, looking at a boy who had just told her he could murder forests without feeling it — did the thing that would define the whole rest of both their lives, the thing that no arithmetic in Lu Yan's cold cabinet had predicted and none would ever fully explain.</p>
+<p>She did not run. She did not recoil. She looked at him with her green-flecked eyes streaming and her whole small body folded around something far heavier than she was, and she said, in a voice that shook and did not break:</p>
+<p>"Then I'm not going anywhere."</p>
+<p>"Mei Sang —"</p>
+<p>"No. Listen." She scrubbed the back of her hand across her face, furious, frightened, absolutely certain. "You just told me the worst thing about yourself like you were reading it off a list. You looked at a dead wood and you came back and the first thing you did was <em>tell me the bill.</em> You didn't hide it. You didn't lie." Her voice cracked, held. "A person who couldn't feel anything wouldn't care if I knew. A person who was really what you keep telling me you are wouldn't need somebody to feel it the right way. But you do. You said it yourself. You <em>need</em> one person to carry the weight, because you can't." She took a breath that was half a sob and squared her small shoulders and made it. "So I'll carry it. That's a healer's job. You break the world and I'll carry what it weighs, and I'll keep telling you the shape of it for as long as you keep telling me the truth, and the day you stop telling me the truth is the day I leave, and not one day before. That's the trade." She held out her hand, scraped and shaking, palm up, the way Ke Lang had spat in his and held it out at the granary wall, the frontier's oldest contract. "Buy me too. Same as the others. But my price isn't fists or a back. My price is you never lie to me about the bill. Ever. That's what I'm worth."</p>
+<p>Lu Yan looked at the offered hand for a long moment in the dark, the way he had looked at Old Cinder's axe, the way he had looked at the dead grass.</p>
+<p>He had bought Ke Lang with shelter and Pip and Dou with fear, and those purchases had cost the world nothing, he'd noticed — the moss had not died on the granary wall. Earned things grew the moss instead of killing it; he had filed that and not understood it. He understood it now, standing at the tree-line of a wood he had murdered, looking at a girl who was offering to carry his weight for the price of his honesty. He understood that there was, perhaps, a kind of taking that did not displace its cost — a kind that <em>made</em> instead of drank — and that the crucible had two faces, the mouth and the forge, and that he had spent six years feeding the mouth and had not once, until this moment, understood what the forge was for.</p>
+<p>He took Mei Sang's hand.</p>
+<p>The moss at the tree-line, the first green moss past the dead grey circle, did not die.</p>
+<p>He noticed. He filed it. And for once — just once, in the failing grey light, with a purple ring turning around him and a dead wood at his back and a frightened girl's scraped hand in his — he let himself not look away from the thing it meant.</p>
+<p>Then the light failed the rest of the way, and the cheap things began to wake in the living parts of the wood, and there were four other children and a long walk home in the dark, and Lu Yan the soul master, age six, one ring, the floor of a very tall house laid in near-black purple, gathered his people and led them east out of the Ashwood toward Slagford, and the spring, and the Tallyman, and everything that was coming.</p>
+<p>Behind them, the grey circle stood silent in the dark, and did not grow back.</p>
+<p>It never would. Lu Yan would come this way again, years later, a Spirit King and then a Spirit Emperor and then something with no name a frontier town could hold, and the circle would still be there, grey and brittle and exactly four hundred paces across, a dead place in a living wood, and he would stand in the center of it and remember the weight, because he had promised himself he would, and because Mei Sang, by then, would no longer be able to remember it for him.</p>
+<p>But that was years away, and the dark was now, and the boy walked home to lay the second course of stone on the floor he had bought, and did not look back, and felt — faintly, in the place where the rat's warmth had lived, in the place a scraped hand had just briefly filled — the smallest possible flicker of something his furnace had no channel for, and could not drink, and could not displace, and did not, for once, try to.</p></div>
+  <nav class="ch-nav"><a href="#ch4">← Previous</a><a class=" js-top" href="#top">↑ Contents</a><span class="disabled">Finis</span></nav>
+</section>
+
+
+<button id="totop" title="Back to contents">↑</button>
+<script>
+(function(){
+  var THEMES=["light","sepia","dark"],root=document.documentElement;
+  try{var t=localStorage.getItem("ccg-theme");if(t)root.setAttribute("data-theme",t);
+    var f=parseFloat(localStorage.getItem("ccg-fs"));if(f)root.style.setProperty("--fs",f+"rem");}catch(e){}
+  function curFs(){var n=parseFloat(getComputedStyle(root).getPropertyValue("--fs"));return isNaN(n)?1.18:n;}
+  function setFs(n){n=Math.max(0.9,Math.min(1.6,n));root.style.setProperty("--fs",n+"rem");try{localStorage.setItem("ccg-fs",n);}catch(e){}}
+  function cycle(){var c=root.getAttribute("data-theme")||"sepia",x=THEMES[(THEMES.indexOf(c)+1)%THEMES.length];root.setAttribute("data-theme",x);try{localStorage.setItem("ccg-theme",x);}catch(e){}}
+  document.addEventListener("click",function(e){var b=e.target.closest("[data-action]");if(!b)return;var a=b.getAttribute("data-action");if(a==="theme")cycle();else if(a==="font-inc")setFs(curFs()+0.06);else if(a==="font-dec")setFs(curFs()-0.06);});
+  var bar=document.getElementById("progress-bar"),totop=document.getElementById("totop");
+  function onScroll(){var h=document.documentElement,max=h.scrollHeight-h.clientHeight,p=max>0?h.scrollTop/max*100:0;if(bar)bar.style.width=p+"%";if(totop)totop.style.display=h.scrollTop>600?"block":"none";}
+  document.addEventListener("scroll",onScroll,{passive:true});window.addEventListener("resize",onScroll);onScroll();
+  if(totop)totop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
+})();
+</script>
+</body>
+</html>

@@ -234,3 +234,22 @@ him. (Seeded early, revealed gradually, central to the crisis.)
 - **Spirit Hall's interest in anomalous souls** — *planted* (rumor in ch.2-3).
 - **Old Cinder's lost war & lost soul** — *planted*; mirror/warning for Lu Yan.
 - **The Forge can reforge people** — *planted*; payoff in warband arc (ethics).
+- **Two faces of the Crucible** — *developing* (ch.5). The **mouth** drinks and
+  displaces cost; the **forge / earned bonds** make and cost nothing (moss lives
+  where deals are freely struck). Lu Yan's growth = learning to live by the forge,
+  not the mouth.
+- **Mei Sang's pact** — *developing* (ch.5). She stays and carries the moral weight
+  so long as he never lies to her about the cost; the day he lies, she leaves.
+  Relationship spine; a loaded gun for the crisis arc.
+- **The grey circle** — *planted* (ch.5). ~400-pace dead zone in the deep Ashwood
+  from absorbing ring #1; permanent; a recurring landmark and conscience-marker.
+- **"Mei Sang will no longer be able to remember the weight for him"** — *planted*
+  (ch.5 flash-forward). Ominous; do not resolve casually.
+- **Lu Yan's self-imposed leash** — *developing* (ch.5): always see the bill, never
+  enjoy the spending. His only restraint; test it and threaten it across arcs.
+
+### First ring (locked canon for this fic)
+Ring #1 = near-top **purple** (ashen direwolf, ~500 yr). Skill #1 = **Hoarfrost
+Tread** (cold, frost, predatory stillness; frost runs ahead along the ground;
+hunter/control utility). This is an over-ranked floor (deliberate, per Old Cinder's
+doctrine) — track that future rings should keep pace ambitiously.

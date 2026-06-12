@@ -84,8 +84,13 @@ won by the limit he chose to grow; **resolution** — the order he forges.
 ---
 
 ## RUNNING STATUS (update every session)
-- Chapters drafted: **2** (ch.1 The Cold Road; ch.2 Slag and Cinder)
-- Approx words written: **~7,000**
-- Current in-story: Lu Yan age 6, concealed rank ~11, 0 rings; winter before the spring tithe; about to enter the Ashwood for ring #1.
-- Established facts to honor: Crucible drinks life → displaced cost (dead grass); Crucible also *refines/forges*; Old Cinder (Ge Tan) ex–Spirit King, soul broken not killed; Mei Sang Mistgrass healer, unafraid of him, coming to the Ashwood; Ke Lang boar-soul bully (not yet recruited); the Tallyman = counting soul, sells awakened children east to the white tower (Spirit Hall); clerk's letter already sent east.
-- Last bible update: initial creation
+- Chapters drafted: **5** (ch.1 The Cold Road; ch.2 Slag and Cinder; ch.3 What the Strong Owe; ch.4 The Ashwood; ch.5 The Floor He Laid)
+- Approx words written: **~18,000**
+- Current in-story: Lu Yan age 6, **1 ring (near-black purple, ashen direwolf, ~500 yr)**, concealed rank 14 = Spirit Master; first soul skill **Hoarfrost Tread** (cold/frost/stillness). Walking home from the Ashwood with his five (Mei Sang, Ke Lang, Dou, Pip). Spring/Tallyman still ahead.
+- NEW established facts to honor:
+  - Plunder/absorption cost scales with *force of opening*; willing/dying = cheap, unwilling/forcing = ruinous, paid by surroundings. Absorbing the purple ring killed a ~400-pace circle of the deep Ashwood ("grey circle"); it never regrows; Lu Yan will revisit it as a landmark later (foreshadowed) — and Mei Sang will eventually no longer be able to "remember the weight for him" (ominous foreshadow planted).
+  - **Earned/given bonds do NOT trigger the displaced cost** — moss lives where deals are struck willingly (granary wall; tree-line). The Crucible has two faces: the **mouth** (drinks, displaces) and the **forge** (makes, no cost). Lu Yan only just grasped this. Central to his arc.
+  - Lu Yan's self-imposed **leash**: always *see the bill*, never *enjoy* the spending. His only restraint.
+  - **Mei Sang's pact**: she stays and "carries the weight" so long as he never lies to her about the cost; the day he lies, she leaves. (Huge relationship spine + payoff device.)
+  - Old Cinder gave him a true frontier hand-axe + the doctrine "don't take the cheap ring; the floor at six holds up the whole house."
+- Last bible update: initial creation (threads in §8 still valid; add "two faces of the Crucible" + "Mei Sang's pact" as developing threads)

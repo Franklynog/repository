@@ -1,0 +1,213 @@
+# Chapter 3 — What the Strong Owe
+
+*Lu Yan, age 6 · Spirit Apprentice (rank 12, concealed) · 0 rings · POV: Lu Yan · Slagford*
+
+---
+
+He needed two things before the Ashwood, and the Ashwood would give him neither. He
+needed strength his six-year-old body did not yet have, and he needed people, because
+he had read enough of both his worlds' stories to know that the man who walks into the
+dark alone is the man whose name becomes a warning.
+
+The strength he could not buy or wait for. So he did the only thing the crucible
+allowed: he fed it, quietly, all winter, in the bottom of Old Cinder's forge where no
+one looked and the dead grass could be blamed on the cold.
+
+It was slow and it was ugly and it taught him more about his soul than any book in
+either life. The ash-rats were easy — the slag-heaps were full of them, and a rat's
+life was a thimble of warmth and a hand's breadth of dead ground. He learned the
+arithmetic of it precisely, because precision was the only mercy he had to offer
+anything. A rat: a thimble. A slag-cat, the lean copper-sheened predators that hunted
+the rats: a cup, and a circle of dead moss the size of a cartwheel. He learned that
+the cost scaled not with what he *gained* but with what he *spent reaching* — that a
+clean, willing, dying thing cost almost nothing to drink, and a strong, frightened,
+fighting thing cost the world around it dearly, because the crucible had to force the
+channels open against a life that did not want to let go, and the forcing was paid for
+in whatever was nearest.
+
+*The willing cost little. The unwilling cost much, and never to me.* He filed it. It
+was, he understood even then, the most important sentence in his life, and he would
+spend that life pretending he had not understood it at six.
+
+By the thaw his concealed rank had climbed from the 10 he had awakened with to past
+12 — a season's gain that should have taken a gifted child a year, that would have
+taken an ordinary one three. Old Cinder, who had been a Spirit King and could feel the
+shape of spirit power the way a blind man feels a room, watched him grow and said
+nothing, until one night he said one thing.
+
+"Whatever you're burning down there," the old man said, not looking up from his anvil,
+"the moss don't grow back where you do it. I've been smithing in this hole forty years.
+I know every weed in it." He set the hammer down. "I'm not asking what it is. I lost
+the right to judge a man's furnace when I marched east. I'm telling you the moss
+remembers. Things remember, furnace child. Build high enough on what doesn't grow back,
+and one day you'll want to stand somewhere green, and there won't be anywhere left."
+
+Lu Yan swept the same patch of floor he always swept. "Is that what happened to you?"
+
+"No," Old Cinder said. "What happened to me is I built on nothing at all, and a man
+with a stronger furnace knocked it down. You've got the opposite problem. You'll never
+be knocked down. That's worse. A man who can't be knocked down never learns where the
+ground is." He looked at Lu Yan with the one good eye, milky and clear at once. "Get
+out of my forge, boy. Go find your second thing. The strength you can steal. The
+people you'll have to *earn*, and earning's a muscle you haven't got."
+
+He was right about that, as it happened. Earning was the one muscle the crucible
+could not feed.
+
+---
+
+Ke Lang was easy to find and hard to use, which made him a perfect place to start.
+
+The older boy held court in the lee of the granary where the tithe-grain was kept, a
+warm wall and a defensible corner, and he held it the way the strong always held things
+on the frontier: by hurting whoever wanted it more than they could bear hurting. He had
+his boar-soul and three winters and forty pounds on Lu Yan, and a court of four
+smaller, hungrier orphans who ate his cruelty because cruelty with a warm wall behind
+it was better than kindness in the cold.
+
+Lu Yan walked up to the warm wall in the grey thaw-light and stood in the open where
+Ke Lang could see him, and waited to be noticed, which did not take long.
+
+"Furnace child wants the wall," Ke Lang said, and grinned, and his court grinned with
+him because that was their function. "Red crystal. Big spooky red crystal." He rolled
+to his feet and let the boar-bristles come up his forearms, coarse and grey and
+genuinely dangerous — a beast-soul at rank thirteen or so, more than enough to break a
+smaller child's bones, which was the whole of his ambition. "Show us a trick, furnace
+child. Go on. Make the scary light. Or are you only scary to clerks?"
+
+It would have been very easy to kill him.
+
+Lu Yan noted this with the flat clarity that passed in him for emotion. He could feel
+the war-trance lying under his skin, the cold stillness that would arrive the instant
+he reached for it, and behind it the maul and the brazier and the channels that drank.
+He could see, laid out in front of him with the cut-glass exactness the trance gave,
+the four moves it would take and the one circle of dead ground it would leave. Ke
+Lang's life was a beast-soul's life. It would be more than a cup. It would, the
+arithmetic said, be most of a level.
+
+He filed the calculation and discarded the action, because Old Cinder was right about
+the muscle he hadn't got, and a corpse could not be earned.
+
+"No trick," Lu Yan said. "I don't want the wall. I want you."
+
+The court laughed. Ke Lang did not, quite, because some animal part of him had heard
+the flatness in it.
+
+"For what," Ke Lang said.
+
+"I'm going into the Ashwood before the tithe," Lu Yan said, in the open, plainly,
+because he had decided that the truth, used like a tool, cut deeper than any lie. "To
+take a spirit ring. I'll be a soul master before the Tallyman comes. And when the
+Tallyman comes, every awakened child in this town reads as cargo on his counting-stick,
+including you, Ke Lang. Boar-soul, rank thirteen, frontier-strong. He'll read you as a
+soldier worth selling. You'll go east in a cart and you'll never see this wall again."
+
+The grin had gone off Ke Lang's face. The court had gone quiet. Out here, *the
+Tallyman* was not a word you joked over.
+
+"I can't stop him reading you," Lu Yan went on. "But a soul master who comes back from
+the Ashwood with a ring reads *higher* than a boar-soul boy. High enough to be
+dangerous to handle. High enough that a careful man counts the cost of taking him and
+decides to take the cheaper cargo instead." He let it land. "You can't get a ring,
+Ke Lang. You'd die in the wood and you know it. I can. I'm offering you a place behind
+the one person in Slagford the Tallyman might decide isn't worth the trouble. That's
+the trade. Your strength, your fists, your back — for the only thing I have that's
+worth anything, which is that men are going to be afraid of me, and fear casts a
+shadow, and you can stand in it."
+
+It was, Lu Yan would reflect later, an almost entirely honest pitch, and that was why
+it worked. He had offered the boy no love and no lie. He had offered him *shelter from
+a real fear*, in exchange for *use*, in language a frontier child understood in his
+bones, and he had done it in front of the boy's court so that refusing would cost Ke
+Lang the only thing he valued, which was the appearance of strength.
+
+Ke Lang stood at his warm wall with his court watching and his world rearranging
+itself, and Lu Yan watched the arithmetic happen behind the older boy's eyes — slower
+than his own, but the same arithmetic, the frontier's arithmetic, the only kind that
+ever mattered out here.
+
+"You come back from the Ashwood with a ring," Ke Lang said slowly, "and I'm yours.
+Fists and back. Till the tithe's past."
+
+"Till I say otherwise," Lu Yan said. "I don't buy a man for a season. Buy you once,
+keep you. That's the trade or there's no trade."
+
+The bigger boy's jaw worked. His court held its breath. And then something moved in Ke
+Lang's face that Lu Yan filed away as more valuable than the strength or the fists —
+*relief*. The relief of a frightened animal that has found something stronger than
+itself to stand behind. Ke Lang had been holding a warm wall against the whole cold
+world with nothing but his own bristles, and he was tired, and he had just been
+offered a bigger wall.
+
+"Yours," Ke Lang said. "Till you say otherwise." And he spat in his palm and held it
+out, the frontier's oldest contract, and Lu Yan looked at the offered hand for a
+moment, and then took it, and felt — distantly, faintly, in the place where the rat's
+warmth had briefly lived — the smallest possible flicker of something the crucible had
+no channel for.
+
+Behind him, where the trade was struck, on the granary wall, the thin spring moss did
+not die.
+
+He noticed that. He noticed it the way he noticed everything, and he did not
+understand it, and he filed it in the cold cabinet under a heading he could not yet
+read: *Earned things cost nothing. Note. Important. Why.*
+
+He would spend years not finishing that thought either.
+
+---
+
+There were five of them in the end, which was four more than Lu Yan had planned and
+exactly as many as Mei Sang insisted on.
+
+Ke Lang, for his fists and his fear. Mei Sang, for her healing and her stubbornness
+and the thing she did to the air around him that he refused to examine. Two of Ke
+Lang's court — a lanky boy named Dou and a quick small girl named Pip, both
+awakened, both weak, both terrified of being left behind to read as cargo. And Lu Yan,
+who was the furnace they would all, knowingly or not, be standing close enough to feed.
+
+Old Cinder caught him at the forge door on the last grey morning before they left,
+and pressed something into his hands, heavy and cold and wrapped in oilcloth. Lu Yan
+unwrapped it. A hand-axe — a real one, frontier iron, the head re-forged and the edge
+honed to a line of light. Plain. Perfect. The old man's one good hand had made it true.
+
+"You go in with a maul of slag you can't lift more than once a day," Old Cinder said
+gruffly, "and you'll learn the hard way that a soul skill's a hammer and a hammer's no
+good when you need a knife. Take the axe. Real iron doesn't tire. Real iron doesn't
+cost you anything you can't see." The good eye held his. "And furnace child — listen.
+The wood's full of cheap rings. Ten-year beasts, fifty-year beasts, white rings,
+yellow rings, easy and weak and they'll never throw you off. Every elder in the Empire
+will tell you to take the cheap ring at six. Match the ring to the rank, they'll say.
+Don't overreach. Live long."
+
+"And you," Lu Yan said.
+
+"And I marched east at fifty-three and lost everything to a man who *had* overreached,
+who'd taken rings he had no business taking and lived, and stood over me afterward, and
+I have hated that advice my whole broken life." The old man's grip tightened on Lu
+Yan's small shoulder, hard enough to bruise, the dead hand twitching at his side as if
+it too wanted to hold on. "Don't take the cheap ring. Not you. A boy with a red crystal
+who takes a white ring is a coward burying his own crystal. Go deep. Find the thing in
+that wood that's old enough and mean enough to *kill* you, and kill it instead, and
+take its ring even if it nearly takes your arm — because the ring you take at six is
+the floor you build the rest of your life on, and a floor of cheap stone holds up a
+cheap house." He let go. He stepped back. He looked, suddenly, very old and very
+tired and faintly, terribly proud, which was the worst of the three. "You'll do it
+anyway. I can see you'll do it anyway. I just wanted to be the one who told you to,
+so that when it nearly kills you, you'll remember a man believed you could pay the
+price and live."
+
+Lu Yan looked down at the axe, and up at the broken Spirit King who had just handed
+him both a tool and a doctrine, and he understood that he had been given something he
+had not earned and could not file — a thing offered freely, the way Mei Sang offered
+bread, that cost the giver and grew the moss instead of killing it.
+
+"I'll bring the axe back," Lu Yan said. It was the closest thing to *thank you* his
+flat grey soul could manufacture, and Old Cinder, who had lost everything and learned
+to read men in the losing, heard it for what it was, and nodded, and turned back to
+his cold forge so the children would not see his face.
+
+They went west on the old way, the road nobody used, into the grey morning and the
+waiting dark of the Ashwood, five children and a furnace, while behind them in Slagford
+the snow finished melting off a dead circle of grass in the tallhouse yard, and east of
+everything, in a white tower, a clerk's sealed letter was opened, and read, and set
+upon a desk where careful, dangerous men decided what the frontier was worth.
